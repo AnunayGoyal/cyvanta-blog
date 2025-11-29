@@ -33,7 +33,7 @@ export default function Navbar() {
             INTEL
           </Link>
           <Link 
-            href="https://anunaygoyal.github.io/portfolio" 
+            href="https://github.com/AnunayGoyal" 
             target="_blank"
             className="text-cyber-muted hover:text-neon-blue transition-colors"
           >
