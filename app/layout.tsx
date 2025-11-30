@@ -3,7 +3,6 @@ import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import "highlight.js/styles/atom-one-dark.css"; 
 import Navbar from "@/components/Navbar"; 
-// 1. IMPORT ANALYTICS - Updated import path
 import { Analytics } from "@vercel/analytics/next";
 
 const jetbrains = JetBrains_Mono({ 
