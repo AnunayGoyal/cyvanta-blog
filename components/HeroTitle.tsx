@@ -20,6 +20,7 @@ export default function HeroTitle() {
         charIndex1++;
       } else {
         clearInterval(timer1);
+        // Start Line 2 after a pause
         setTimeout(() => {
           const timer2 = setInterval(() => {
             if (charIndex2 <= text2.length) {
@@ -37,25 +38,30 @@ export default function HeroTitle() {
   }, []);
 
   return (
+    // FIX: Added 'min-h' constraints to ensure layout is stable before typing starts
     <div className="flex flex-col items-center justify-center w-full max-w-full overflow-hidden">
       
-      {/* LINE 1: Scale text down for mobile */}
-      <div className="h-6 md:h-8 mb-2 flex items-center">
-        <span className="text-sm md:text-2xl font-mono text-gray-400 tracking-[2px] md:tracking-[3px]">
+      {/* LINE 1: Added 'min-h-[2rem]' to reserve space */}
+      <div className="min-h-[2rem] md:min-h-[3rem] mb-2 flex items-center justify-center">
+        <span className="text-sm md:text-2xl font-mono text-gray-400 tracking-[2px] md:tracking-[3px] text-center whitespace-nowrap">
           {line1}
         </span>
+        {/* Cursor logic: Only show if typing is active or waiting */}
         {line1.length < text1.length && (
           <span className="ml-1 w-1.5 h-4 md:w-2 md:h-5 bg-gray-400 animate-pulse inline-block"></span>
         )}
       </div>
 
-      {/* LINE 2: Responsive Text Size (text-5xl on mobile, 9xl on desktop) */}
-      <h1 className="text-5xl sm:text-6xl md:text-9xl font-bold tracking-[1px] md:tracking-[3px] text-white select-none relative text-center">
-        {line2}
-        {line1.length === text1.length && (
-          <span className="ml-1 text-primary animate-[blink_1s_step-end_infinite]">_</span>
-        )}
-      </h1>
+      {/* LINE 2: Added 'min-h' to reserve space for the big text */}
+      <div className="min-h-[4rem] md:min-h-[8rem] flex items-center justify-center">
+        <h1 className="text-5xl sm:text-6xl md:text-9xl font-bold tracking-[1px] md:tracking-[3px] text-white select-none relative text-center whitespace-nowrap">
+          {line2}
+          {/* Big Cursor: Only shows after Line 1 is done */}
+          {line1.length === text1.length && (
+            <span className="ml-1 text-primary animate-[blink_1s_step-end_infinite]">_</span>
+          )}
+        </h1>
+      </div>
 
     </div>
   );
