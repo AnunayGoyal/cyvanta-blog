@@ -27,5 +27,4 @@ def detect_anomaly(latency_array):
     for val in latency_array:
         if val > threshold:
             anomalies.append(val)
-            
     return anomalies

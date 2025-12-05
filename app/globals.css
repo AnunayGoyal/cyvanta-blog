@@ -3,24 +3,27 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 201, 209, 217;
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 5, 5, 5;
+  --background-end-rgb: 5, 5, 5;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: #0d1117;
-  font-family: 'Courier New', Courier, monospace;
-  overflow-x: hidden;
+  background: rgb(var(--background-start-rgb));
+  font-family: var(--font-mono), monospace;
+  /* Optional: Adds a subtle CRT scanline texture */
+  background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background-size: 100% 2px, 3px 100%;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #0d1117; }
-::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #00ff41; }
+/* Selection color - when you highlight text, it becomes Red */
+::selection {
+  background: #E63E32;
+  color: #000;
+}
 
-.bg-grid {
-  background-size: 40px 40px;
-  background-image: linear-gradient(to right, rgba(48, 54, 61, 0.3) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(48, 54, 61, 0.3) 1px, transparent 1px);
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }

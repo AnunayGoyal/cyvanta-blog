@@ -1,35 +1,38 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}", // specific to your src folder if you use it
   ],
   theme: {
     extend: {
       colors: {
-        cyber: {
-          black: "#0d1117",    // Deep Navy
-          gray: "#161b22",     // Card Background
-          text: "#c9d1d9",     // Main Text
-          muted: "#8b949e",    // Muted Text
+        primary: {
+          DEFAULT: "#E63E32", // Your Brand Red
+          dark: "#B92B21",
+          glow: "#FF6B61",
         },
-        neon: {
-          green: "#00ff41",    // Hacker Green
-          blue: "#0071e3",     // Accent Blue
-          red: "#ff0055",      // Attack Red
-        },
+        background: "#050505",
+        surface: "#0F0F0F",
       },
       fontFamily: {
-        mono: ['var(--font-jetbrains)', 'monospace'],
+        mono: ["var(--font-mono)", "monospace"], // Your terminal font
       },
-      backgroundImage: {
-        "grid-pattern": "linear-gradient(to right, #30363d 1px, transparent 1px), linear-gradient(to bottom, #30363d 1px, transparent 1px)",
+      // Animation definitions
+      animation: {
+        blink: 'blink 1s step-end infinite',
+      },
+      keyframes: {
+        blink: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0' },
+        },
       },
     },
   },
-  // ACTIVATE THE PLUGIN HERE
   plugins: [
-    require('@tailwindcss/typography'),
+    require('@tailwindcss/typography'), // The plugin we added for the blog
   ],
 };
