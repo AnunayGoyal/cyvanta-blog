@@ -37,20 +37,20 @@ export default function HeroTitle() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center justify-center w-full max-w-full overflow-hidden">
       
-      {/* LINE 1: Added tracking-[3px] */}
-      <div className="h-8 mb-2 flex items-center">
-        <span className="text-xl md:text-2xl font-mono text-gray-400 tracking-[3px]">
+      {/* LINE 1: Scale text down for mobile */}
+      <div className="h-6 md:h-8 mb-2 flex items-center">
+        <span className="text-sm md:text-2xl font-mono text-gray-400 tracking-[2px] md:tracking-[3px]">
           {line1}
         </span>
         {line1.length < text1.length && (
-          <span className="ml-1 w-2 h-5 bg-gray-400 animate-pulse inline-block"></span>
+          <span className="ml-1 w-1.5 h-4 md:w-2 md:h-5 bg-gray-400 animate-pulse inline-block"></span>
         )}
       </div>
 
-      {/* LINE 2: Changed tracking-tighter to tracking-[3px] */}
-      <h1 className="text-8xl md:text-9xl font-bold tracking-[3px] text-white select-none relative">
+      {/* LINE 2: Responsive Text Size (text-5xl on mobile, 9xl on desktop) */}
+      <h1 className="text-5xl sm:text-6xl md:text-9xl font-bold tracking-[1px] md:tracking-[3px] text-white select-none relative text-center">
         {line2}
         {line1.length === text1.length && (
           <span className="ml-1 text-primary animate-[blink_1s_step-end_infinite]">_</span>

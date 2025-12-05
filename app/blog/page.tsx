@@ -1,56 +1,84 @@
-import Link from 'next/link';
-import { getAllPosts } from '@/lib/mdx';
+import Link from "next/link";
+import HeroTitle from "@/components/HeroTitle";
 
-export default function BlogPage() {
-  const posts = getAllPosts();
-
+export default function Home() {
   return (
-    <main className="flex flex-col items-center min-h-screen p-8 md:p-24">
-      
-      {/* HEADER */}
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex mb-12">
-        <Link href="/" className="text-cyber-muted hover:text-neon-green transition-colors">
-          &lt; RETURN TO BASE
-        </Link>
+    // FIX: Reduced padding (p-4 mobile) and ensured overflow-hidden
+    <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-12 w-full max-w-[1600px] mx-auto overflow-x-hidden">
+
+      {/* --- Top Section: Status & Bio --- */}
+      {/* FIX: Stack items on mobile (flex-col) vs row on desktop */}
+      <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4 mb-16 md:mb-32 text-sm font-mono text-gray-400">
+        
+        {/* System Status Indicator */}
+        <div className="border border-white/20 px-4 py-2 rounded-sm flex items-center gap-3 bg-black/50 backdrop-blur-sm w-full md:w-auto justify-center">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+          </span>
+          <span className="tracking-wide">System Status: <span className="text-white font-bold">ONLINE</span></span>
+        </div>
+        
+        {/* Author Link */}
+        <a href="https://anunaygoyal.github.io/portfolio" target="_blank" className="hover:text-primary transition-colors text-xs md:text-sm">
+          By Anunay Goyal
+        </a>
       </div>
 
-      <h1 className="text-4xl md:text-6xl font-bold tracking-tighter mb-12 text-center">
-        INTELLIGENCE <span className="text-neon-green">FEED</span>
-      </h1>
+      {/* --- Hero Section --- */}
+      {/* FIX: Reduced margin (mb-16 mobile) and height */}
+      <div className="mb-16 md:mb-32 relative z-10 text-center w-full min-h-[100px] flex items-center justify-center">
+        <HeroTitle />
+        {/* Background Glow */}
+        <div className="absolute inset-0 bg-primary/10 blur-[80px] md:blur-[120px] rounded-full z-[-1] pointer-events-none"></div>
+      </div>
 
-      {/* POSTS GRID */}
-      <div className="grid gap-6 w-full max-w-4xl">
-        {posts.map((post: any) => (
-          <Link
-            key={post.slug}
-            href={`/blog/${post.slug}`}
-            className="group block border border-cyber-gray bg-cyber-black/50 p-6 rounded-xl hover:border-neon-green transition-all"
-          >
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              <div>
-                <h2 className="text-2xl font-bold mb-2 group-hover:text-neon-green transition-colors">
-                  {post.meta.title}
-                </h2>
-                <p className="text-cyber-muted mb-3 text-sm">{post.meta.description}</p>
-                
-                {/* Tags Section */}
-                <div className="flex gap-2">
-                  {/* FIX: Added '?' here to prevent crash if tags are missing */}
-                  {post.meta.tags?.map((tag: string) => (
-                    <span key={tag} className="text-xs font-mono border border-cyber-gray px-2 py-1 rounded text-neon-blue bg-cyber-gray/30">
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Date Badge */}
-              <span className="text-xs font-mono text-cyber-muted border border-cyber-gray px-3 py-1 rounded whitespace-nowrap">
-                {post.meta.date}
-              </span>
-            </div>
-          </Link>
-        ))}
+      {/* --- Content Grid (Cards) --- */}
+      {/* FIX: Added gap-4 for mobile */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 w-full pb-10">
+        
+        {/* CARD 1: RESEARCH (GREEN HOVER) */}
+        <Link href="/blog/ai-driven-ddos" className="group relative border border-white/10 bg-[#0a0a0a] p-8 rounded-sm hover:border-green-500/50 transition-all duration-300 flex flex-col justify-between min-h-[280px] overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+          
+          <div className="relative z-10 flex justify-between items-start mb-4">
+            <span className="text-xs font-bold border border-white/20 px-2 py-1 rounded text-gray-300 group-hover:border-green-500 group-hover:text-green-500 transition-colors">RESEARCH</span>
+            <span className="text-xs text-gray-500">Nov 28, 2025</span>
+          </div>
+          <div className="relative z-10">
+            <h2 className="text-2xl font-bold mb-3 group-hover:text-green-500 transition-colors">AI-Driven DDoS -&gt;</h2>
+            <p className="text-gray-400 text-sm leading-relaxed">Analyzing patterns in adversarial machine learning attacks against critical infrastructure.</p>
+          </div>
+        </Link>
+
+        {/* CARD 2: RED TEAM (RED HOVER - Default) */}
+        <Link href="#" className="group relative border border-white/10 bg-[#0a0a0a] p-8 rounded-sm hover:border-primary/50 transition-all duration-300 flex flex-col justify-between min-h-[280px] overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+          <div className="relative z-10 flex justify-between items-start mb-4">
+            <span className="text-xs font-bold border border-white/20 px-2 py-1 rounded text-gray-300 group-hover:border-primary group-hover:text-primary transition-colors">RED TEAM</span>
+            <span className="text-xs text-gray-500">Oct 15, 2025</span>
+          </div>
+          <div className="relative z-10">
+            <h2 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">Wonderland CTF -&gt;</h2>
+            <p className="text-gray-400 text-sm leading-relaxed">Full walkthrough involving Python library hijacking and privilege escalation.</p>
+          </div>
+        </Link>
+
+        {/* CARD 3: DEFENSE (BLUE HOVER) */}
+        <Link href="#" className="group relative border border-white/10 bg-[#0a0a0a] p-8 rounded-sm hover:border-blue-500/50 transition-all duration-300 flex flex-col justify-between min-h-[280px] overflow-hidden">
+           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+          <div className="relative z-10 flex justify-between items-start mb-4">
+            <span className="text-xs font-bold border border-white/20 px-2 py-1 rounded text-gray-300 group-hover:border-blue-500 group-hover:text-blue-500 transition-colors">DEFENSE</span>
+            <span className="text-xs text-gray-500">Sep 02, 2025</span>
+          </div>
+          <div className="relative z-10">
+            <h2 className="text-2xl font-bold mb-3 group-hover:text-blue-500 transition-colors">Splunk Analysis -&gt;</h2>
+            <p className="text-gray-400 text-sm leading-relaxed">Detecting brute force attempts and lateral movement in Windows Event Logs.</p>
+          </div>
+        </Link>
+
       </div>
     </main>
   );
