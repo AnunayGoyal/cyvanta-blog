@@ -6,6 +6,7 @@ const contentDirectory = path.join(process.cwd(), "content");
 
 // Helper to find all MDX files recursively
 function getAllMdxFiles(dir: string, fileList: string[] = []) {
+  if (!fs.existsSync(dir)) return [];
   const files = fs.readdirSync(dir);
 
   files.forEach((file) => {
@@ -25,28 +26,18 @@ function getAllMdxFiles(dir: string, fileList: string[] = []) {
 }
 
 export async function getPostBySlug(slug: string) {
+  // CRASH FIX: Return null if slug is undefined
+  if (!slug) return null;
+
   const realSlug = slug.replace(/\.mdx$/, "");
-  
-  // 1. Scan the file system
   const allFiles = getAllMdxFiles(contentDirectory);
   
-  // 2. Debug Log: Look at your terminal to see this list!
-  console.log(`\n🔍 Scanning for slug: [${realSlug}]`);
-  console.log("📂 Files found in content folder:");
-  allFiles.forEach(f => console.log(`   - ${path.basename(f)}`));
-
-  // 3. Find the matching file
   const matchedPath = allFiles.find((filePath) => {
     const fileName = path.basename(filePath, ".mdx");
     return fileName === realSlug;
   });
 
-  if (!matchedPath) {
-    console.log("❌ File NOT found.");
-    return null;
-  }
-
-  console.log(`✅ File FOUND at: ${matchedPath}`);
+  if (!matchedPath) return null;
 
   const fileContents = fs.readFileSync(matchedPath, "utf8");
   const { data, content } = matter(fileContents);
@@ -60,15 +51,10 @@ export async function getPostBySlug(slug: string) {
 
 export function getAllPosts() {
   const allFiles = getAllMdxFiles(contentDirectory);
-  
   return allFiles.map((filePath) => {
     const slug = path.basename(filePath, ".mdx");
     const fileContents = fs.readFileSync(filePath, "utf8");
     const { data } = matter(fileContents);
-
-    return {
-      slug,
-      frontmatter: data,
-    };
+    return { slug, frontmatter: data };
   });
 }

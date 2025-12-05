@@ -13,7 +13,7 @@ Detecting this requires correlating **Event ID 4624** (Login) with network anoma
 
 The following logic was deployed to flag this activity:
 
-<CodeWindow title="query.spl" lang="SPLUNK SPL">
+<CodeWindow title="query.spl" lang="spl">
 {`// Correlate Failed Logins with Successful Admin Access
 index=windows source="WinEventLog:Security"
 | where EventCode=4625 OR EventCode=4624

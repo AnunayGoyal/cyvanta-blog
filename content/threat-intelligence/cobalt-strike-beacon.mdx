@@ -1,0 +1,33 @@
+---
+title: "Cobalt Strike: Decoding Beacon Jitter"
+date: "2025-12-05"
+tags: ["Signals", "Malware", "Analysis"]
+---
+
+Advanced Persistent Threats (APTs) rarely use constant heartbeats. They use **Jitter**—randomizing the interval between callbacks to evade pattern detection.
+
+We analyzed a sample of a Cobalt Strike beacon found in a financial network.
+
+### Pattern Recognition
+
+The beacon was configured with a `sleep` of 60 seconds and a `jitter` of 20%. This means callbacks occur randomly between 48s and 72s.
+
+<CodeWindow title="detector.py" lang="PYTHON">
+{`def analyze_traffic(pcap_data):
+    # Extract timestamps of outgoing HTTPS requests to C2
+    timestamps = extract_timestamps(pcap_data)
+    deltas = []
+    
+    for i in range(len(timestamps)-1):
+        deltas.append(timestamps[i+1] - timestamps[i])
+        
+    # Calculate Variance
+    mean = sum(deltas) / len(deltas)
+    variance = sum((x - mean) ** 2 for x in deltas) / len(deltas)
+    
+    if 48 <= mean <= 72 and variance > 0:
+        print("!! ALERT: Potential Beacon Detected !!")
+        print(f"Mean Interval: {mean}s")`}
+</CodeWindow>
+
+By calculating the statistical variance of outbound traffic, we can identify these "random" connections that deviate from normal user behavior.
