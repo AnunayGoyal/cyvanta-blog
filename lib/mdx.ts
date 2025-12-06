@@ -58,3 +58,53 @@ export function getAllPosts() {
     return { slug, frontmatter: data };
   });
 }
+
+// ... existing imports
+
+export interface CategoryMeta {
+  slug: string;
+  title: string;
+  subtitle: string;
+  tag: string;
+  description: string;
+  color: string;
+}
+
+export function getCategories(): CategoryMeta[] {
+  // Get all folders in 'content'
+  const items = fs.readdirSync(contentDirectory);
+
+  const categories = items
+    .filter((item) => {
+      const fullPath = path.join(contentDirectory, item);
+      return fs.statSync(fullPath).isDirectory();
+    })
+    .map((folderName) => {
+      const metaPath = path.join(contentDirectory, folderName, "meta.json");
+      
+      // Default values if meta.json is missing
+      let meta = {
+        title: folderName.replace(/-/g, ' ').toUpperCase(),
+        subtitle: "CATEGORY",
+        tag: folderName.toUpperCase(),
+        description: "No description available.",
+        color: "gray"
+      };
+
+      if (fs.existsSync(metaPath)) {
+        const fileContent = fs.readFileSync(metaPath, "utf8");
+        try {
+          meta = { ...meta, ...JSON.parse(fileContent) };
+        } catch (e) {
+          console.error(`Error parsing meta.json for ${folderName}`);
+        }
+      }
+
+      return {
+        slug: folderName,
+        ...meta,
+      };
+    });
+
+  return categories;
+}
