@@ -1,7 +1,7 @@
 {
-  "title": "Trail Folder 1",
-  "subtitle": "ZERO TRUST",
-  "tag": "CLOUD",
-  "description": "Securing AWS, Azure infrastructure and container orchestration.",
-  "color": "white"
+  "title": "test-title-1",
+  "subtitle": "test-subtitle-1",
+  "tag": "test-tag-1",
+  "description": "test-description-1",
+  "color": "#F54927"
 }

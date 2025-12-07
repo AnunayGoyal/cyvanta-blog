@@ -2,46 +2,20 @@ import Link from "next/link";
 import HeroTitle from "@/components/HeroTitle";
 import { getCategories } from "@/lib/mdx";
 
-const getColorClasses = (color: string) => {
-  const colors: Record<string, any> = {
-    emerald: {
-      border: "hover:border-emerald-500/50",
-      text: "group-hover:text-emerald-500",
-      tagBorder: "group-hover:border-emerald-500",
-      tagText: "group-hover:text-emerald-500",
-      gradient: "from-emerald-500/10",
-    },
-    red: {
-      border: "hover:border-red-500/50",
-      text: "group-hover:text-red-500",
-      tagBorder: "group-hover:border-red-500",
-      tagText: "group-hover:text-red-500",
-      gradient: "from-red-500/10",
-    },
-    cyan: {
-      border: "hover:border-cyan-500/50",
-      text: "group-hover:text-cyan-500",
-      tagBorder: "group-hover:border-cyan-500",
-      tagText: "group-hover:text-cyan-500",
-      gradient: "from-cyan-500/10",
-    },
-    purple: {
-      border: "hover:border-purple-500/50",
-      text: "group-hover:text-purple-500",
-      tagBorder: "group-hover:border-purple-500",
-      tagText: "group-hover:text-purple-500",
-      gradient: "from-purple-500/10",
-    },
-    gray: {
-      border: "hover:border-gray-500/50",
-      text: "group-hover:text-gray-500",
-      tagBorder: "group-hover:border-gray-500",
-      tagText: "group-hover:text-gray-500",
-      gradient: "from-gray-500/10",
-    },
+// Helper: Converts names to Hex, or passes through your custom Hex codes
+const getHexColor = (color: string) => {
+  const defaults: Record<string, string> = {
+    emerald: "#10b981", // Bright Green
+    red: "#ef4444",     // Danger Red
+    cyan: "#06b6d4",    // Neon Blue
+    purple: "#a855f7",  // Deep Purple
+    gray: "#6b7280",    // Stealth Gray
+    orange: "#f97316",  // Warning Orange
+    yellow: "#eab308",  // Alert Yellow
   };
 
-  return colors[color] || colors.gray;
+  // Return the mapped hex, or the raw string if it's already a hex code
+  return defaults[color] || (color.startsWith("#") ? color : "#6b7280");
 };
 
 export default function Home() {
@@ -75,38 +49,61 @@ export default function Home() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full pb-10">
         
         {categories.map((cat) => {
-          const theme = getColorClasses(cat.color);
+          // 1. Get the Hex Code
+          const hexColor = getHexColor(cat.color);
 
           return (
             <Link 
               key={cat.slug}
               href={`/blog/category/${cat.slug}`} 
-              // 1. FIXED HEIGHT: Forces all cards to be 350px tall
-              className={`group relative border border-white/10 bg-[#0a0a0a] p-8 rounded-sm ${theme.border} transition-all duration-300 flex flex-col h-[350px] overflow-hidden`}
+              // 2. Pass color as CSS Variable
+              style={{ "--theme-color": hexColor } as React.CSSProperties}
+              className={`
+                group relative border border-white/10 bg-[#0a0a0a] p-8 rounded-sm 
+                transition-all duration-300 flex flex-col h-[350px] overflow-hidden
+                
+                /* Dynamic Hover Effects */
+                hover:border-[var(--theme-color)] 
+                hover:shadow-[0_0_20px_-10px_var(--theme-color)]
+              `}
             >
-              <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}></div>
+              {/* Dynamic Background Glow */}
+              <div 
+                className="absolute inset-0 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{
+                  background: `linear-gradient(to bottom right, color-mix(in srgb, var(--theme-color), transparent 90%), transparent)`
+                }}
+              ></div>
               
-              {/* 2. TOP SECTION: Fixed height container (48px) to align top tags */}
+              {/* TOP SECTION: Fixed Height (48px) */}
               <div className="relative z-10 flex justify-between items-start h-12 shrink-0">
-                <span className={`text-xs font-bold border border-white/20 px-2 py-1 rounded text-gray-300 ${theme.tagBorder} ${theme.tagText} transition-colors tracking-widest`}>
+                <span className={`
+                  text-xs font-bold border border-white/20 px-2 py-1 rounded text-gray-300 
+                  transition-colors tracking-widest
+                  group-hover:text-[var(--theme-color)]
+                  group-hover:border-[var(--theme-color)]
+                `}>
                   {cat.tag}
                 </span>
                 <span className="text-xs text-gray-500 uppercase">{cat.subtitle}</span>
               </div>
 
-              {/* 3. CONTENT SECTION: Pushed to bottom with mt-auto */}
+              {/* BOTTOM SECTION: Pushed Down */}
               <div className="relative z-10 mt-auto">
                 
-                {/* 4. HEADING WRAPPER: Fixed height (4rem/64px) ensures titles line up */}
-                <div className="h-16 flex items-end mb-3">
-                  <h2 className={`text-2xl font-bold ${theme.text} transition-colors line-clamp-2`}>
+                {/* Heading Wrapper: Fixed Height (80px) */}
+                <div className="h-20 flex items-end mb-2">
+                  <h2 className={`
+                    text-2xl font-bold transition-colors line-clamp-2
+                    group-hover:text-[var(--theme-color)]
+                  `}>
                     {cat.title} -&gt;
                   </h2>
                 </div>
                 
-                {/* 5. DESCRIPTION WRAPPER: Fixed height (5rem/80px) ensures bottom border aligns */}
-                <div className="h-20">
-                  <p className="text-gray-400 text-sm leading-relaxed line-clamp-3">
+                {/* Description Wrapper: Fixed Height (96px) */}
+                <div className="h-24 overflow-hidden">
+                  <p className="text-gray-400 text-sm leading-relaxed line-clamp-4">
                     {cat.description}
                   </p>
                 </div>
