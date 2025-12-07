@@ -22,17 +22,17 @@ module.exports = {
       },
       // Animation definitions
       animation: {
-        blink: 'blink 1s step-end infinite',
+        blink: "blink 1s step-end infinite",
       },
       keyframes: {
         blink: {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0' },
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0" },
         },
       },
     },
   },
   plugins: [
-    require('@tailwindcss/typography'), // The plugin we added for the blog
+    require("@tailwindcss/typography"), // The plugin we added for the blog
   ],
 };

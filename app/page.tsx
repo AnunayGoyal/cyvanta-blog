@@ -23,33 +23,41 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-12 w-full max-w-[1600px] mx-auto overflow-x-hidden">
-
       {/* --- Top Section --- */}
       <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4 mb-10 md:mb-16 text-sm font-mono text-gray-400">
-        <div className="border border-white/20 px-4 py-2 rounded-sm flex items-center gap-3 bg-black/50 backdrop-blur-sm w-full md:w-auto justify-center">
+        <div className="border border-white/20 px-4 py-2 rounded-sm flex items-center gap-3 bg-black/40 backdrop-blur-sm">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
           </span>
-
           <span className="tracking-wide">
             System Status: <span className="text-white font-bold">ONLINE</span>
           </span>
         </div>
 
-        <a
-          href="https://anunaygoyal.github.io/portfolio"
-          target="_blank"
-          className="hover:text-primary transition-colors text-xs md:text-sm"
-        >
-          By Anunay Goyal
-        </a>
+        <div className="flex items-center gap-4">
+          <a
+            href="https://anunaygoyal.github.io/portfolio"
+            target="_blank"
+            className="hover:text-primary transition-colors text-xs md:text-sm"
+          >
+            By Anunay Goyal
+          </a>
+
+          {/* Link to global search / index */}
+          <Link
+            href="/blog/search"
+            className="text-[11px] font-mono uppercase tracking-[0.2em] text-gray-300 hover:text-primary border border-white/20 px-3 py-1 rounded-sm"
+          >
+            OPEN INDEX
+          </Link>
+        </div>
       </div>
 
       {/* --- Hero Section --- */}
       <div className="mb-10 md:mb-16 relative z-10 text-center w-full min-h-[80px] flex items-center justify-center">
         <HeroTitle />
-        <div className="absolute inset-0 bg-primary/10 blur-[80px] md:blur-[120px] rounded-full z-[-1] pointer-events-none" />
+        <div className="absolute inset-0 bg-primary/10 blur-[120px] rounded-full z-[-1] pointer-events-none" />
       </div>
 
       {/* --- Category Cards Grid --- */}
@@ -70,10 +78,9 @@ export default function Home() {
                 hover:shadow-[0_0_18px_-10px_var(--theme-color)]
               `}
             >
-
-              {/* Glow BG */}
+              {/* Glow background */}
               <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                className="absolute inset-0 opacity-0 group-hover:opacity-60 transition-opacity duration-500 pointer-events-none"
                 style={{
                   background:
                     "linear-gradient(to bottom right, color-mix(in srgb, var(--theme-color), transparent 90%), transparent)",
@@ -82,7 +89,7 @@ export default function Home() {
 
               {/* TOP SECTION */}
               <div className="relative z-10 flex justify-between items-start h-10 shrink-0">
-                {/* --- Bigger TAG Chip --- */}
+                {/* Tag chip */}
                 <span
                   className={`
                     text-[11px] font-bold border border-white/25 px-3 py-[3px] rounded-sm text-gray-300 

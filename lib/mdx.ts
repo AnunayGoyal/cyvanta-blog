@@ -54,7 +54,7 @@ export async function getPostBySlug(slug: string) {
 }
 
 /**
- * Optional helper: all posts across all categories.
+ * Legacy helper: all posts across all categories, minimal info.
  */
 export function getAllPosts() {
   const allFiles = getAllMdxFiles(CONTENT_DIR);
@@ -173,4 +173,95 @@ export function getPostsByCategorySlug(categorySlug: string): PostMeta[] {
     if (!a.date || !b.date) return 0;
     return a.date < b.date ? 1 : -1;
   });
+}
+
+/* -------------------------------------------------------------------------- */
+/*                    Global helpers for search / filters                     */
+/* -------------------------------------------------------------------------- */
+
+export type FullPostMeta = PostMeta & {
+  categoryTitle: string;   // Human readable category name
+  categoryTag: string;     // Short label (PROTOCOLS, VECTORS, etc.)
+  categoryColor: string;   // "cyan", "emerald", "#ff0000", etc.
+};
+
+/**
+ * Returns all posts across all categories with full metadata,
+ * ideal for search, filters, and recommendations.
+ */
+export function getAllPostsDetailed(): FullPostMeta[] {
+  const categories = getCategories();
+  const all: FullPostMeta[] = [];
+
+  for (const cat of categories) {
+    const posts = getPostsByCategorySlug(cat.slug);
+    for (const post of posts) {
+      all.push({
+        ...post,
+        categoryTitle: cat.title,
+        categoryTag: cat.tag,
+        categoryColor: cat.color,
+      });
+    }
+  }
+
+  // Sort globally by date desc when available
+  return all.sort((a, b) => {
+    if (!a.date || !b.date) return 0;
+    return a.date < b.date ? 1 : -1;
+  });
+}
+
+/**
+ * Get a unique, sorted list of all tags across all posts.
+ */
+export function getAllTags(): string[] {
+  const posts = getAllPostsDetailed();
+  const tagSet = new Set<string>();
+
+  for (const post of posts) {
+    (post.tags ?? []).forEach((t) => {
+      if (t && typeof t === "string") {
+        tagSet.add(t);
+      }
+    });
+  }
+
+  return Array.from(tagSet).sort((a, b) => a.localeCompare(b));
+}
+
+/**
+ * Get related posts for a given slug based on shared tags + same category.
+ * By default, returns up to `limit` posts.
+ */
+export function getRelatedPosts(
+  slug: string,
+  limit: number = 4
+): FullPostMeta[] {
+  const posts = getAllPostsDetailed();
+  const current = posts.find((p) => p.slug === slug);
+
+  if (!current) return [];
+
+  const currentTags = new Set(current.tags ?? []);
+
+  // Score other posts
+  const scored = posts
+    .filter((p) => p.slug !== slug)
+    .map((p) => {
+      let score = 0;
+
+      // Same category gets a base boost
+      if (p.categorySlug === current.categorySlug) score += 2;
+
+      // Shared tags → +1 per tag
+      const sharedTags = (p.tags ?? []).filter((t) => currentTags.has(t));
+      score += sharedTags.length;
+
+      return { post: p, score };
+    })
+    .filter((x) => x.score > 0)
+    .sort((a, b) => b.score - a.score);
+
+  return scored.slice(0, limit).map((x) => x.post);
 }
