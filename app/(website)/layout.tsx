@@ -4,6 +4,8 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RouteTransition from "@/components/RouteTransition";
+import { VisualEditing } from "next-sanity/visual-editing";
+import { draftMode } from "next/headers";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -16,7 +18,7 @@ export const metadata: Metadata = {
   description: "Advanced security research and offensive operations.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -52,6 +54,13 @@ export default function RootLayout({
         </RouteTransition>
 
         <Footer />
+
+        {/* Helper for Sanity Presentation Tool (Live Preview) */}
+        {(await draftMode()).isEnabled && (
+          <>
+            <VisualEditing />
+          </>
+        )}
       </body>
     </html>
   );

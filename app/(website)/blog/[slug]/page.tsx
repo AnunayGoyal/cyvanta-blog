@@ -1,14 +1,57 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPostBySlug } from "@/lib/mdx"; 
-import { MDXRemote } from "next-mdx-remote/rsc"; 
-import CodeWindow from "@/components/CodeWindow"; 
+import { getPostBySlug } from "@/lib/mdx";
+import { PortableText } from "next-sanity";
+import CodeWindow from "@/components/CodeWindow";
+import { urlFor } from "@/sanity/lib/image";
 
-// FORCE DYNAMIC RENDERING (Prevents Caching Issues)
+// FORCE DYNAMIC RENDERING
 export const dynamic = "force-dynamic";
 
-const components = {
-  CodeWindow,
+const ptComponents = {
+  types: {
+    code: ({ value }: any) => {
+      // FIX: Ensure we map Sanity code block fields to CodeWindow props correctly
+      return (
+        <CodeWindow
+          title={value.filename || 'Terminal'}
+          lang={value.language || 'text'}
+        >
+          {value.code}
+        </CodeWindow>
+      );
+    },
+    callout: ({ value }: any) => {
+      const style = value.style || 'info';
+      const colors = {
+        info: 'border-blue-500/50 bg-blue-500/10 text-blue-200',
+        warning: 'border-orange-500/50 bg-orange-500/10 text-orange-200',
+        danger: 'border-red-500/50 bg-red-500/10 text-red-200'
+      };
+      return (
+        <div className={`p-4 my-4 rounded-sm border ${colors[style as keyof typeof colors]}`}>
+          <PortableText value={value.content || []} />
+        </div>
+      )
+    },
+    image: ({ value }: any) => {
+      if (!value?.asset?._ref) {
+        return null
+      }
+      return (
+        <div className="my-8 relative w-full h-[400px]">
+          <img
+            src={urlFor(value).width(800).fit('max').auto('format').url()}
+            alt={value.alt || 'Post image'}
+            className="object-contain w-full h-full"
+          />
+        </div>
+      )
+    }
+  },
+  block: {
+    alert: ({ children }: any) => <blockquote className="border-l-4 border-yellow-500 pl-4 italic my-4">{children}</blockquote>
+  }
 };
 
 const getTagColor = (tag: string) => {
@@ -22,29 +65,27 @@ const getTagColor = (tag: string) => {
   return "text-gray-400 border-gray-400/20 bg-gray-400/5";
 };
 
-// --- FIX FOR NEXT.JS 15 ---
 type Props = {
   params: Promise<{ slug: string }>;
 };
 
 export default async function BlogPost({ params }: Props) {
-  // 1. AWAIT THE PARAMS (Required in Next.js 15 to prevent "undefined" errors)
   const { slug } = await params;
-  
-  // 2. Fetch the post using the slug
+
   const post = await getPostBySlug(slug);
 
   if (!post) {
     return notFound();
   }
 
-  const { frontmatter, content } = post;
+  // With Sanity, 'post' properties are direct, not inside 'frontmatter'
+  const { title, date, tags, content, author } = post;
 
   return (
     <div className="min-h-screen bg-black text-gray-300 font-mono selection:bg-primary selection:text-black pb-24">
       {/* Background Grid */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-         <div className="absolute inset-0 bg-[radial-gradient(#333_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-50"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(#333_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-50"></div>
       </div>
 
       <div className="relative z-10 max-w-3xl mx-auto px-6 pt-12 md:pt-20">
@@ -55,28 +96,29 @@ export default async function BlogPost({ params }: Props) {
 
         <header className="mb-12 border-b border-white/10 pb-8">
           <div className="flex gap-3 mb-6">
-            {frontmatter.tags && frontmatter.tags.map((tag: string) => (
+            {tags && tags.map((tag: string) => (
               <span key={tag} className={`text-xs font-bold border px-2 py-1 rounded uppercase tracking-wider ${getTagColor(tag)}`}>
                 {tag}
               </span>
             ))}
           </div>
-          
+
           <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight mb-4 leading-tight">
-            {frontmatter.title}
+            {title}
           </h1>
 
           <div className="flex items-center text-sm text-gray-500 font-mono">
             <span className="text-primary mr-2">::</span>
-            <time>{frontmatter.date}</time>
+            <time>{date}</time>
             <span className="mx-4">|</span>
-            <span>By Anunay Goyal</span>
+            <span>By {author?.name || 'Anunay Goyal'}</span>
           </div>
         </header>
 
-        {/* Article Content: Added styling to ensure paragraphs look good */}
+        {/* Article Content */}
         <article className="prose prose-invert prose-headings:text-white prose-a:text-primary prose-code:text-primary prose-pre:bg-[#0a0a0a] prose-pre:border prose-pre:border-white/10 max-w-none">
-             <MDXRemote source={content} components={components} />
+          {/* @ts-expect-error PortableText types mismatch sometimes */}
+          <PortableText value={content} components={ptComponents} />
         </article>
       </div>
     </div>

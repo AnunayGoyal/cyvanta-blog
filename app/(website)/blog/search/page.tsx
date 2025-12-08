@@ -6,7 +6,7 @@ export const metadata = {
 };
 
 export default async function BlogSearchPage() {
-  const posts = getAllPostsDetailed();
+  const posts = await getAllPostsDetailed();
 
   return (
     <main className="min-h-screen w-full px-4 py-10 md:py-16 flex justify-center">

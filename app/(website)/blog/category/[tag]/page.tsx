@@ -25,7 +25,7 @@ export default async function CategoryPage({
 }) {
   const { tag } = await params; // e.g. "cloud-security", "defense-mechanisms", etc.
 
-  const categories = getCategories();
+  const categories = await getCategories();
 
   // Slug === folder name (what you use in href={`/blog/category/${cat.slug}`})
   const lowered = tag.toLowerCase();
@@ -47,7 +47,7 @@ export default async function CategoryPage({
     );
   }
 
-  const posts = getPostsByCategorySlug(category.slug);
+  const posts = await getPostsByCategorySlug(category.slug);
   const themeColor = getHexColor(category.color);
 
   return (

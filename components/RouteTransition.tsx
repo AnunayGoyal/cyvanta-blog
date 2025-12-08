@@ -25,7 +25,7 @@ export default function RouteTransition({
       </div>
 
       {/* Page content – fade/slide in on each route */}
-      <div key={pathname} className="motion-safe:animate-fadeInUp">
+      <div className="motion-safe:animate-fadeInUp">
         {children}
       </div>
     </div>

@@ -18,8 +18,8 @@ const getHexColor = (color: string) => {
   return defaults[color] || (color.startsWith("#") ? color : "#6b7280");
 };
 
-export default function Home() {
-  const categories = getCategories();
+export default async function Home() {
+  const categories = await getCategories();
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-12 w-full max-w-[1600px] mx-auto overflow-x-hidden">

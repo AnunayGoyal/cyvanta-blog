@@ -1,13 +1,13 @@
 # CYVANTA — Security Research Platform
 
-This is the official codebase for **CYVANTA**, a modern cybersecurity research platform built using **Next.js**, **MDX**, and **TailwindCSS**.  
+This is the official codebase for **CYVANTA**, a modern cybersecurity research platform built using **Next.js**, **Sanity CMS**, and **TailwindCSS**.
 It powers a structured, category-driven system for publishing research on:
 
-- Cloud Security  
-- Threat Intelligence  
-- Red Team & Offensive Operations  
-- Defense Mechanisms  
-- Malware & Analysis  
+- Cloud Security
+- Threat Intelligence
+- Red Team & Offensive Operations
+- Defense Mechanisms
+- Malware & Analysis
 - And more…
 
 The platform is deployed on **Vercel** and designed for high performance, extendability, and a premium cyber-themed UI.
@@ -28,7 +28,8 @@ Run development server:
 npm run dev
 ```
 
-Visit **http://localhost:3000**.
+Visit **http://localhost:3000** for the frontend.
+Visit **http://localhost:3000/studio** to access the Content Management System.
 
 ---
 
@@ -36,67 +37,43 @@ Visit **http://localhost:3000**.
 
 ```
 cyvanta-blog/
-├── app/
-│   ├── blog/
-│   │   ├── category/[tag]/page.tsx
-│   │   ├── search/page.tsx
-│   │   └── [slug]/page.tsx
-│   ├── layout.tsx
-│   └── page.tsx
-├── components/
-│   ├── BlogExplorer.tsx
-│   ├── HeroTitle.tsx
-│   ├── Navbar.tsx
-│   └── Footer.tsx
-├── content/
-│   ├── cloud-security/
-│   ├── defense-mechanisms/
-│   ├── offensive-operations/
-│   ├── threat-intelligence/
-│   └── */meta.json + *.mdx
-├── lib/
-│   └── mdx.ts
-├── public/
-├── tailwind.config.js
-├── package.json
-└── README.md
+├── app/                  # Next.js App Router
+├── components/           # UI Components
+├── sanity/               # Sanity CMS config & schemas
+│   ├── schemas/          # Content types (Post, Category, Author)
+│   └── env.ts            # Environment variables
+├── public/               # Static assets
+└── package.json
 ```
 
 ---
 
 ## 📝 Writing New Articles
 
-Create or open a category folder in `/content`.
+Content is managed via **Sanity Studio**.
 
-Add a new `.mdx` file:
+1. Navigate to `http://localhost:3000/studio`.
+2. Login (if required).
+3. Create a new **Post**.
+   - **Title & Slug**: Article header.
+   - **Category**: Classify under Cloud Sec, Threat Intel, etc.
+   - **Content**: Rich text editor with support for:
+     - Code blocks (for exploits/scripts)
+     - Callouts (Info/Warning/Danger)
+     - Images
+   - **Author**: Link to an author profile.
 
-```
-my-article.mdx
-```
-
-Example frontmatter:
-
-```md
----
-title: "AI-Driven DDoS: The New Threat Landscape"
-summary: "How adversarial ML models reshape modern DDoS attacks."
-date: "2025-11-28"
-tags: ["network", "ai", "signals"]
----
-```
-
-Posts automatically appear in category pages, search, and recommendations.
+Posts will automatically appear in category pages and search results.
 
 ---
 
 ## 🔍 Features
 
-- Custom MDX loader  
-- Global search & filtering  
-- Tag indexing  
-- Category metadata  
-- Cyberpunk UI with grid background  
-- Fully responsive
+- **Sanity CMS**: Real-time content management with a custom schema.
+- **Rich Content Support**: Code blocks, custom callouts, and rich text.
+- **Global Search**: Filter by category and tags.
+- **Cyberpunk UI**: Premium dark-mode design with grid backgrounds.
+- **Fully Responsive**: Optimized for all devices.
 
 ---
 
@@ -104,25 +81,23 @@ Posts automatically appear in category pages, search, and recommendations.
 
 Push to GitHub → Vercel auto-builds.
 
-Manual deployment:
-
-```bash
-vercel --prod
-```
+**Environment Variables Required:**
+- `NEXT_PUBLIC_SANITY_PROJECT_ID`
+- `NEXT_PUBLIC_SANITY_DATASET`
 
 ---
 
 ## ⚡ Tech Stack
 
-- Next.js 16  
-- MDX  
-- TailwindCSS  
-- TypeScript  
-- Vercel Hosting
+- **Framework**: Next.js 16
+- **CMS**: Sanity (w/ Studio)
+- **Styling**: TailwindCSS
+- **Language**: TypeScript / JavaScript
+- **Hosting**: Vercel
 
 ---
 
 ## 🙌 Author
 
-**Anunay Goyal**  
+**Anunay Goyal**
 Portfolio: https://anunaygoyal.github.io/portfolio
