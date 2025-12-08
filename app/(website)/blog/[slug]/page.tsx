@@ -117,7 +117,7 @@ export default async function BlogPost({ params }: Props) {
 
         {/* Article Content */}
         <article className="prose prose-invert prose-headings:text-white prose-a:text-primary prose-code:text-primary prose-pre:bg-[#0a0a0a] prose-pre:border prose-pre:border-white/10 max-w-none">
-          {/* @ts-expect-error PortableText types mismatch sometimes */}
+
           <PortableText value={content} components={ptComponents} />
         </article>
       </div>
