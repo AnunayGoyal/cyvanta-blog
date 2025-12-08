@@ -26,8 +26,9 @@ module.exports = {
         fadeIn: "fadeIn 0.8s ease-out both",
         pulseSoft: "pulseSoft 2.4s ease-in-out infinite",
         breathe: "breathe 10s ease-in-out infinite alternate",
-        scanline: "scanline 1s linear",              // single sweep (used elsewhere)
-        scanlineLoop: "scanline 1s linear infinite", // continuous while hovered
+        scanline: "scanline 1s linear",
+        scanlineLoop: "scanline 1s linear infinite",
+        routeWipe: "routeWipe 0.6s ease-out", // NEW – page transition bar
       },
       keyframes: {
         blink: {
@@ -60,6 +61,23 @@ module.exports = {
           },
           "100%": {
             transform: "translateY(120%)",
+            opacity: "0",
+          },
+        },
+        routeWipe: {
+          "0%": {
+            transform: "translateX(-100%)",
+            opacity: "0",
+          },
+          "20%": {
+            opacity: "0.7",
+          },
+          "60%": {
+            transform: "translateX(0%)",
+            opacity: "1",
+          },
+          "100%": {
+            transform: "translateX(100%)",
             opacity: "0",
           },
         },
