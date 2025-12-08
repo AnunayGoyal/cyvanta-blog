@@ -33,7 +33,7 @@ export default function BlogExplorer({ posts }: Props) {
     const map = new Map<string, string>(); // slug -> title
     posts.forEach((p) => {
       if (!map.has(p.categorySlug)) {
-        map.set(p.categorySlug, p.categoryTitle);
+        map.set(p.categorySlug, p.categoryTitle || 'Uncategorized');
       }
     });
     return Array.from(map.entries()).map(([slug, title]) => ({ slug, title }));
@@ -175,7 +175,7 @@ function PostRow({
   post: FullPostMeta;
   highlightCategory?: boolean;
 }) {
-  const themeColor = getHexColor(post.categoryColor);
+  const themeColor = getHexColor(post.categoryColor || 'gray');
 
   const rowStyle: CSSProperties = {
     "--theme-color": themeColor,
@@ -218,7 +218,7 @@ function PostRow({
             color: themeColor,
           }}
         >
-          {post.categoryTag}
+          {post.categoryTag || 'GENERAL'}
         </span>
       </div>
 
