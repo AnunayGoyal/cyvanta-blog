@@ -24,10 +24,17 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-12 w-full max-w-[1600px] mx-auto overflow-x-hidden">
       {/* --- Top Section --- */}
-      <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4 mb-10 md:mb-16 text-sm font-mono text-gray-400">
+      <div
+        className={`
+          w-full flex flex-col md:flex-row justify-between items-center gap-4 
+          mb-10 md:mb-16 text-sm font-mono text-gray-400
+          motion-safe:animate-fadeInUp
+        `}
+        style={{ animationDelay: "80ms" }}
+      >
         <div className="border border-white/20 px-4 py-2 rounded-sm flex items-center gap-3 bg-black/40 backdrop-blur-sm">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+            <span className="motion-safe:animate-pulseSoft absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-60" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
           </span>
           <span className="tracking-wide">
@@ -55,37 +62,59 @@ export default function Home() {
       </div>
 
       {/* --- Hero Section --- */}
-      <div className="mb-10 md:mb-16 relative z-10 text-center w-full min-h-[80px] flex items-center justify-center">
+      <div
+        className="
+          mb-10 md:mb-16 relative z-10 text-center w-full min-h-[80px] 
+          flex flex-col items-center justify-center gap-2
+          motion-safe:animate-fadeInUp
+        "
+        style={{ animationDelay: "180ms" }}
+      >
         <HeroTitle />
+
+        {/* Typing cursor / console subtitle */}
+        <div className="text-[10px] md:text-xs font-mono uppercase tracking-[0.3em] text-gray-500 flex items-center gap-1">
+          Security Research Console
+          <span className="animate-blink">▌</span>
+        </div>
+
         <div className="absolute inset-0 bg-primary/10 blur-[120px] rounded-full z-[-1] pointer-events-none" />
       </div>
 
       {/* --- Category Cards Grid --- */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full pb-10">
-        {categories.map((cat) => {
+        {categories.map((cat, index) => {
           const hexColor = getHexColor(cat.color);
 
           return (
             <Link
               key={cat.slug}
               href={`/blog/category/${cat.slug}`}
-              style={{ "--theme-color": hexColor } as CSSProperties}
+              style={
+                {
+                  "--theme-color": hexColor,
+                  animationDelay: `${220 + index * 80}ms`,
+                } as CSSProperties
+              }
               className={`
                 group relative border border-white/10 bg-[#0a0a0a] 
                 p-4 md:p-5 rounded-sm transition-all duration-300 
                 flex flex-col h-[260px] md:h-[280px] overflow-hidden
                 hover:border-[var(--theme-color)] 
-                hover:shadow-[0_0_18px_-10px_var(--theme-color)]
+                hover:-translate-y-1
+                motion-safe:animate-fadeInUp
               `}
             >
-              {/* Glow background */}
+              {/* Continuous scanline sweep on hover */}
               <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-60 transition-opacity duration-500 pointer-events-none"
+                className="pointer-events-none absolute inset-x-0 -inset-y-4 opacity-0 group-hover:opacity-100 group-hover:motion-safe:animate-scanlineLoop"
                 style={{
                   background:
-                    "linear-gradient(to bottom right, color-mix(in srgb, var(--theme-color), transparent 90%), transparent)",
+                    "linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%)",
                 }}
               />
+
+              {/* (Glow background removed to avoid white flash) */}
 
               {/* TOP SECTION */}
               <div className="relative z-10 flex justify-between items-start h-10 shrink-0">

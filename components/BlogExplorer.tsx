@@ -144,7 +144,7 @@ export default function BlogExplorer({ posts }: Props) {
             Recommended
           </h2>
           <div className="space-y-3">
-            {recommended.map((post) => (
+            {recommended.map((post, idx) => (
               <PostRow key={post.slug} post={post} highlightCategory />
             ))}
           </div>
@@ -182,7 +182,7 @@ function PostRow({
   } as CSSProperties;
 
   if (highlightCategory) {
-    // Slight glow for recommended, border stays white
+    // Slight glow for recommended, but border itself stays white
     rowStyle.boxShadow = "0 0 18px -14px var(--theme-color)";
   }
 
@@ -195,9 +195,20 @@ function PostRow({
         border border-white/20 bg-transparent
         px-4 py-3 md:px-5 md:py-4
         hover:border-white/60 hover:bg-white/5
+        hover:-translate-y-[2px]
         transition
+        motion-safe:animate-fadeInUp
       `}
     >
+      {/* Scanline sweep on hover */}
+      <div
+        className="pointer-events-none absolute inset-x-0 -inset-y-4 opacity-0 group-hover:opacity-100 group-hover:motion-safe:animate-scanline"
+        style={{
+          background:
+            "linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%)",
+        }}
+      />
+
       {/* Category chip only (no repeated tags) */}
       <div className="mb-2 flex flex-wrap items-center gap-2 text-[10px] font-mono uppercase tracking-[0.18em]">
         <span

@@ -1,116 +1,134 @@
-import Link from "next/link";
-import { notFound } from "next/navigation";
 import { getCategories, getPostsByCategorySlug } from "@/lib/mdx";
+import Link from "next/link";
+import type { CSSProperties } from "react";
 
-// In Next 15/16, `params` is a Promise in RSC routes
-type CategoryPageProps = {
-  params: Promise<{ tag: string }>;
+// Same color helper used on homepage
+const getHexColor = (color: string) => {
+  const defaults: Record<string, string> = {
+    emerald: "#10b981",
+    red: "#ef4444",
+    cyan: "#06b6d4",
+    purple: "#a855f7",
+    gray: "#6b7280",
+    orange: "#f97316",
+    yellow: "#eab308",
+  };
+
+  return defaults[color] || (color.startsWith("#") ? color : "#6b7280");
 };
 
-export default async function CategoryPage({ params }: CategoryPageProps) {
-  const { tag } = await params; // e.g. "defense-mechanisms", "cloud-security"
+// IMPORTANT: params is a Promise in this Next.js version
+export default async function CategoryPage({
+  params,
+}: {
+  params: Promise<{ tag: string }>;
+}) {
+  const { tag } = await params; // e.g. "cloud-security", "defense-mechanisms", etc.
 
-  // 1. Find the matching category by slug (slug === folder name in /content)
   const categories = getCategories();
-  const category = categories.find((c) => c.slug === tag);
+
+  // Slug === folder name (what you use in href={`/blog/category/${cat.slug}`})
+  const lowered = tag.toLowerCase();
+  const category = categories.find(
+    (c) => c.slug.toLowerCase() === lowered
+  );
 
   if (!category) {
-    notFound();
-  }
-
-  // 2. Get all posts under this category
-  const posts = getPostsByCategorySlug(tag);
-  const recordLabel = posts.length === 1 ? "RECORD" : "RECORDS";
-
-  return (
-    <main className="min-h-screen w-full max-w-6xl mx-auto px-4 py-10 md:py-16">
-      {/* RETURN ROOT */}
-      <div className="mb-4 md:mb-6">
+    return (
+      <div className="max-w-4xl mx-auto p-8 text-gray-400 font-mono">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-xs md:text-sm font-mono text-gray-500 hover:text-primary transition-colors"
+          className="text-xs uppercase tracking-[0.2em] text-gray-500 hover:text-white transition block mb-4"
         >
-          <span className="text-lg leading-none">←</span>
-          <span className="uppercase tracking-[0.2em]">Return Root</span>
+          ← Return Root
         </Link>
+        <h1 className="text-xl">Category not found.</h1>
       </div>
+    );
+  }
 
-      {/* DIRECTORY HEADER */}
-      <header className="mb-8 md:mb-10 border-b border-white/10 pb-6">
-        <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-3">
-          <span className="text-gray-300">DIRECTORY:</span>{" "}
-          <span className="text-cyan-400">
-            {category.title.toUpperCase()}
-          </span>
-        </h1>
+  const posts = getPostsByCategorySlug(category.slug);
+  const themeColor = getHexColor(category.color);
 
-        <p className="text-[11px] md:text-xs font-mono uppercase tracking-[0.3em] text-gray-500 mb-2">
-          {posts.length} {recordLabel} FOUND IN "{category.slug.toUpperCase()}"
-        </p>
+  return (
+    <div
+      style={{ "--theme-color": themeColor } as CSSProperties}
+      className="max-w-5xl mx-auto px-4 md:px-8 py-10 font-mono"
+    >
+      {/* Return Root */}
+      <Link
+        href="/"
+        className="text-xs uppercase tracking-[0.2em] text-gray-400 hover:text-[var(--theme-color)] transition"
+      >
+        ← Return Root
+      </Link>
 
-        <p className="text-sm md:text-base text-gray-400 max-w-2xl">
+      {/* Title */}
+      <h1 className="text-4xl md:text-5xl font-bold mt-4">
+        DIRECTORY:{" "}
+        <span className="text-[var(--theme-color)]">{category.title}</span>
+      </h1>
+
+      {/* Record count */}
+      <p className="text-xs tracking-[0.2em] text-gray-500 mt-2">
+        {posts.length} RECORDS FOUND IN "{category.slug.toUpperCase()}"
+      </p>
+
+      {/* Category Description */}
+      {category.description && (
+        <p className="mt-4 max-w-2xl text-sm text-gray-400 leading-relaxed">
           {category.description}
         </p>
-      </header>
-
-      {/* POSTS LIST */}
-      {posts.length === 0 ? (
-        <p className="text-gray-500 text-sm">
-          No posts have been added to this directory yet.
-        </p>
-      ) : (
-        <section className="space-y-4">
-          {posts.map((post) => (
-            <Link
-              key={post.slug}
-              href={`/blog/${post.slug}`}
-              className={`
-                group relative block border border-white/10 rounded-sm 
-                bg-black/60 px-4 py-4 md:px-6 md:py-5
-                hover:border-cyan-400/60 hover:bg-black/80 transition
-              `}
-            >
-              {/* TAG ROW */}
-              <div className="mb-3 flex flex-wrap gap-2 text-[10px] font-mono uppercase tracking-[0.18em]">
-                {/* Primary category tag (from card) */}
-                <span className="px-2 py-1 rounded-sm border border-cyan-400/40 bg-cyan-400/5 text-cyan-300">
-                  {category.tag}
-                </span>
-
-                {/* Extra tags from post frontmatter, if any */}
-                {post.tags &&
-                  post.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 py-1 rounded-sm border border-white/15 bg-white/5 text-gray-200"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-              </div>
-
-              {/* TITLE + DATE ROW */}
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                <h2 className="text-base md:text-lg font-semibold text-white group-hover:text-cyan-300 transition-colors">
-                  {post.title}
-                </h2>
-
-                {post.date && (
-                  <span className="text-xs font-mono text-gray-500">
-                    {post.date}
-                  </span>
-                )}
-              </div>
-            </Link>
-          ))}
-        </section>
       )}
-    </main>
-  );
-}
 
-// Pre-generate static category pages based on all category slugs
-export function generateStaticParams() {
-  const categories = getCategories();
-  return categories.map((cat) => ({ tag: cat.slug }));
+      {/* Divider line */}
+      <div className="mt-6 h-px w-full bg-white/10" />
+
+      {/* Posts */}
+      <div className="mt-6 space-y-5">
+        {posts.map((post) => (
+          <Link
+            key={post.slug}
+            href={`/blog/${post.slug}`}
+            className={`
+              group block border border-white/10 rounded-sm p-5 bg-black/30
+              transition hover:border-[var(--theme-color)] hover:bg-black/40
+            `}
+          >
+            {/* TAGS */}
+            <div className="flex items-center flex-wrap gap-2 text-[10px] uppercase tracking-[0.18em] mb-2">
+              <span
+                className="px-2 py-[3px] border rounded-sm"
+                style={{
+                  color: themeColor,
+                  borderColor: themeColor,
+                }}
+              >
+                {category.tag}
+              </span>
+
+              {post.tags?.map((t) => (
+                <span
+                  key={t}
+                  className="px-2 py-[3px] border border-white/20 text-gray-300 rounded-sm"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+
+            {/* Title & Date */}
+            <div className="flex justify-between items-center gap-3">
+              <h2 className="text-lg md:text-xl text-white group-hover:text-[var(--theme-color)] transition">
+                {post.title}
+              </h2>
+              {post.date && (
+                <span className="text-xs text-gray-400">{post.date}</span>
+              )}
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
 }
