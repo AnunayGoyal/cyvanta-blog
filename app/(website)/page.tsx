@@ -57,13 +57,7 @@ export default async function Home() {
             By Anunay Goyal
           </a>
 
-          {/* Link to global search / index */}
-          <Link
-            href="/blog/search"
-            className="text-[11px] font-mono uppercase tracking-[0.2em] text-gray-300 hover:text-primary border border-white/20 px-3 py-1 rounded-sm"
-          >
-            OPEN INDEX
-          </Link>
+
         </div>
       </div>
 

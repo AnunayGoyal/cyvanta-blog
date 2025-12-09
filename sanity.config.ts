@@ -15,6 +15,7 @@ import { structure } from './sanity/structure'
 import { codeInput } from '@sanity/code-input'
 import { defineLocations, presentationTool } from 'sanity/presentation'
 import { table } from '@sanity/table'
+import BulkDeleteTool from './sanity/tools/BulkDeleteTool'
 
 export default defineConfig({
   title: 'Cyvanta Studio',
@@ -23,6 +24,13 @@ export default defineConfig({
   dataset,
   // Add and edit the content schema in the './sanity/schemaTypes' folder
   schema,
+  tools: (prev, context) => { // 'prev' is an array of tools
+    return [...prev, {
+      name: 'bulk-delete',
+      title: 'Bulk Delete',
+      component: BulkDeleteTool
+    }]
+  },
   plugins: [
     structureTool({ structure }),
     // Vision is for querying with GROQ from inside the Studio
