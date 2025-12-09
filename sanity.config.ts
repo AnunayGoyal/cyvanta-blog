@@ -14,6 +14,7 @@ import { schema } from './sanity/schemaTypes'
 import { structure } from './sanity/structure'
 import { codeInput } from '@sanity/code-input'
 import { defineLocations, presentationTool } from 'sanity/presentation'
+import { table } from '@sanity/table'
 
 export default defineConfig({
   title: 'Cyvanta Studio',
@@ -28,6 +29,7 @@ export default defineConfig({
     // https://www.sanity.io/docs/the-vision-plugin
     visionTool({ defaultApiVersion: apiVersion }),
     codeInput(),
+    table(),
     presentationTool({
       previewUrl: {
         draftMode: {

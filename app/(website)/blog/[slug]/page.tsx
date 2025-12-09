@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { getPostBySlug } from "@/lib/mdx";
 import { PortableText } from "next-sanity";
 import CodeWindow from "@/components/CodeWindow";
+import Table from "@/components/Table";
+import YouTube from "@/components/YouTube";
 import { urlFor } from "@/sanity/lib/image";
 
 // FORCE DYNAMIC RENDERING
@@ -47,7 +49,9 @@ const ptComponents = {
           />
         </div>
       )
-    }
+    },
+    table: ({ value }: any) => <Table value={value} />,
+    youtube: ({ value }: any) => <YouTube value={value} />,
   },
   block: {
     alert: ({ children }: any) => <blockquote className="border-l-4 border-yellow-500 pl-4 italic my-4">{children}</blockquote>
