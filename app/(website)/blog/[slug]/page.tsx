@@ -92,7 +92,7 @@ export default async function BlogPost({ params }: Props) {
         <div className="absolute inset-0 bg-[radial-gradient(#333_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-50"></div>
       </div>
 
-      <div className="relative z-10 max-w-3xl mx-auto px-6 pt-12 md:pt-20">
+      <div className="relative z-10 max-w-3xl mx-auto px-6 pt-32 md:pt-40">
         <Link href="/" className="group inline-flex items-center text-sm text-gray-500 hover:text-primary transition-colors mb-8">
           <span className="mr-2 transition-transform group-hover:-translate-x-1">&lt;-</span>
           BACK TO INTEL

@@ -9,8 +9,8 @@ export default async function BlogSearchPage() {
   const posts = await getAllPostsDetailed();
 
   return (
-    <main className="min-h-screen w-full px-4 py-10 md:py-16 flex justify-center">
-      <div className="w-full max-w-6xl">
+    <main className="min-h-screen w-full px-4 pt-32 pb-10 md:pb-16 flex justify-center">
+      <div className="w-full max-w-[95vw]">
         {/* Header */}
         <header className="mb-8 border-b border-white/10 pb-5">
           <p className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mb-2">

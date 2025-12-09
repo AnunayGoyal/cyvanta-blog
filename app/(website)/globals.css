@@ -17,6 +17,20 @@ body {
   background-size: 100% 2px, 3px 100%;
 }
 
+/* RESPONSIVE SCALING: Fluid Root Sizing */
+html {
+  /* 
+     Base size: 16px
+     Scales down linearly as viewport shrinks below 1920px
+     Minimum size: 12px
+     Formula: clamp(min, preferred, max)
+  */
+  font-size: clamp(12px, 0.833vw + 4px, 16px);
+}
+
+/* On very large screens, cap it or let it grow if desired. 
+   Currently capped at 16px by the clamp above. */
+
 /* Selection color - when you highlight text, it becomes Red */
 ::selection {
   background: #E63E32;
@@ -24,14 +38,30 @@ body {
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
 
 /* Custom "Breathing" Animation */
 @keyframes breathe {
-  0%, 100% { opacity: 0.2; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.1); }
+
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
 }
 
 .animate-breathe {

@@ -28,7 +28,7 @@ export default async function Home() {
   const categories = await getCategories();
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-12 w-full max-w-[1600px] mx-auto overflow-x-hidden">
+    <main className="flex min-h-screen flex-col items-center justify-center p-4 pt-32 md:p-12 md:pt-36 w-full max-w-[90vw] mx-auto overflow-x-hidden">
       {/* --- Top Section --- */}
       <div
         className={`
