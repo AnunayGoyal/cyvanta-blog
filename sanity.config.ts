@@ -70,4 +70,10 @@ export default defineConfig({
       },
     }),
   ],
+  document: {
+    actions: (prev, context) => {
+      // Ensure 'delete' and other standard actions are available
+      return prev;
+    },
+  },
 })

@@ -13,10 +13,10 @@ export const CATEGORIES_QUERY = defineQuery(`
 `);
 
 export const POSTS_QUERY = defineQuery(`
-  *[_type == "post"]|order(date desc){
+  *[_type == "post"]|order(_createdAt desc){
     title,
     "slug": slug.current,
-    date,
+    "date": _createdAt,
     summary,
     "categorySlug": category->slug.current,
     "categoryTitle": category->title,
@@ -30,7 +30,7 @@ export const POST_BY_SLUG_QUERY = defineQuery(`
   *[_type == "post" && slug.current == $slug][0]{
     title,
     "slug": slug.current,
-    date,
+    "date": _createdAt,
     summary,
     content,
     "categorySlug": category->slug.current,
@@ -41,10 +41,10 @@ export const POST_BY_SLUG_QUERY = defineQuery(`
 `);
 
 export const POSTS_BY_CATEGORY_QUERY = defineQuery(`
-  *[_type == "post" && category->slug.current == $categorySlug]|order(date desc){
+  *[_type == "post" && category->slug.current == $categorySlug]|order(_createdAt desc){
     title,
     "slug": slug.current,
-    date,
+    "date": _createdAt,
     summary,
     "categorySlug": category->slug.current,
     tags

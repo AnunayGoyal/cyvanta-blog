@@ -28,12 +28,8 @@ export const postType = defineType({
       title: 'Summary',
       type: 'text',
     }),
-    defineField({
-      name: 'date',
-      title: 'Date',
-      type: 'datetime',
-      validation: (Rule) => Rule.required(),
-    }),
+
+    // Date field removed; system _createdAt used instead
     defineField({
       name: 'coverImage',
       title: 'Cover Image',

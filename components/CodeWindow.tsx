@@ -3,19 +3,19 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-export default function CodeWindow({ 
-  title, 
-  lang, 
-  children 
-}: { 
-  title: string; 
-  lang: string; 
-  children: string 
+export default function CodeWindow({
+  title,
+  lang,
+  children
+}: {
+  title: string;
+  lang: string;
+  children: string
 }) {
   return (
     <div className="not-prose my-8">
       <div className="bg-[#0D0D0D] border border-white/10 rounded-md overflow-hidden shadow-2xl">
-        
+
         {/* Terminal Header */}
         <div className="flex items-center justify-between px-4 py-2 border-b border-white/5 bg-white/5">
           <div className="flex gap-2">
@@ -26,7 +26,7 @@ export default function CodeWindow({
           <span className="text-xs text-gray-500 font-mono">{title}</span>
           <span className="text-xs text-gray-600 font-bold border border-white/10 px-1 rounded uppercase">{lang}</span>
         </div>
-        
+
         {/* The Magic: Syntax Highlighter */}
         <div className="overflow-x-auto">
           <SyntaxHighlighter
