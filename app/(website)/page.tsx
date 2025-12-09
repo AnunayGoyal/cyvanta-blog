@@ -4,18 +4,24 @@ import HeroTitle from "@/components/HeroTitle";
 import { getCategories } from "@/lib/mdx";
 
 // Helper: Converts names to Hex, or passes through your custom Hex codes
-const getHexColor = (color: string) => {
+// Helper: Converts names to Hex, or passes through your custom Hex codes
+const getHexColor = (color: string | undefined) => {
+  const c = (color || "").toLowerCase().trim();
   const defaults: Record<string, string> = {
     emerald: "#10b981",
+    green: "#10b981",
     red: "#ef4444",
     cyan: "#06b6d4",
+    blue: "#3b82f6",
     purple: "#a855f7",
     gray: "#6b7280",
     orange: "#f97316",
     yellow: "#eab308",
+    pink: "#ec4899",
+    indigo: "#6366f1",
   };
 
-  return defaults[color] || (color.startsWith("#") ? color : "#6b7280");
+  return defaults[c] || (c.startsWith("#") ? c : "#6b7280");
 };
 
 export default async function Home() {

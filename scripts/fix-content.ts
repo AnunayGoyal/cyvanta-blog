@@ -15,7 +15,7 @@ const FILES = [
     { slug: "data-breach-trust", path: "content/defense-mechanisms/data-breach-trust.mdx" },
 ];
 
-function transformContentToBlocks(content) {
+function transformContentToBlocks(content: string) {
     const blocks = [];
 
     // Regex to match <CodeWindow ...> ... </CodeWindow>

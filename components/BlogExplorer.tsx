@@ -10,18 +10,23 @@ type Props = {
 };
 
 // Same color mapping as homepage
-const getHexColor = (color: string) => {
+const getHexColor = (color: string | undefined) => {
+  const c = (color || "").toLowerCase().trim();
   const defaults: Record<string, string> = {
     emerald: "#10b981",
+    green: "#10b981",
     red: "#ef4444",
     cyan: "#06b6d4",
+    blue: "#3b82f6",
     purple: "#a855f7",
     gray: "#6b7280",
     orange: "#f97316",
     yellow: "#eab308",
+    pink: "#ec4899",
+    indigo: "#6366f1",
   };
 
-  return defaults[color] || (color.startsWith("#") ? color : "#6b7280");
+  return defaults[c] || (c.startsWith("#") ? c : "#6b7280");
 };
 
 export default function BlogExplorer({ posts }: Props) {
