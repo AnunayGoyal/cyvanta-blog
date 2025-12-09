@@ -46,7 +46,7 @@ export default function BlogExplorer({ posts }: Props) {
 
   const tags = useMemo(() => {
     const set = new Set<string>();
-    posts.forEach((p) => (p.tags ?? []).forEach((t) => set.add(t)));
+    posts.forEach((p) => (p.tags ?? []).forEach((t) => set.add(t.title)));
     return Array.from(set.values()).sort((a, b) => a.localeCompare(b));
   }, [posts]);
 
@@ -55,7 +55,7 @@ export default function BlogExplorer({ posts }: Props) {
 
     return posts.filter((post) => {
       if (category !== "all" && post.categorySlug !== category) return false;
-      if (tag !== "all" && !(post.tags ?? []).includes(tag)) return false;
+      if (tag !== "all" && !(post.tags ?? []).some((t) => t.title === tag)) return false;
 
       if (!q) return true;
 
@@ -66,7 +66,7 @@ export default function BlogExplorer({ posts }: Props) {
         " " +
         post.categoryTitle +
         " " +
-        (post.tags ?? []).join(" ")
+        (post.tags ?? []).map((t) => t.title).join(" ")
       ).toLowerCase();
 
       return haystack.includes(q);
