@@ -2,27 +2,7 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import HeroTitle from "@/components/HeroTitle";
 import { getCategories } from "@/lib/mdx";
-
-// Helper: Converts names to Hex, or passes through your custom Hex codes
-// Helper: Converts names to Hex, or passes through your custom Hex codes
-const getHexColor = (color: string | undefined) => {
-  const c = (color || "").toLowerCase().trim();
-  const defaults: Record<string, string> = {
-    emerald: "#10b981",
-    green: "#10b981",
-    red: "#ef4444",
-    cyan: "#06b6d4",
-    blue: "#3b82f6",
-    purple: "#a855f7",
-    gray: "#6b7280",
-    orange: "#f97316",
-    yellow: "#eab308",
-    pink: "#ec4899",
-    indigo: "#6366f1",
-  };
-
-  return defaults[c] || (c.startsWith("#") ? c : "#6b7280");
-};
+import { getCategoryHex } from "@/lib/tags";
 
 export default async function Home() {
   const categories = await getCategories();
@@ -84,7 +64,7 @@ export default async function Home() {
       {/* --- Category Cards Grid --- */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full pb-10">
         {categories.map((cat, index) => {
-          const hexColor = getHexColor(cat.color);
+          const hexColor = getCategoryHex(cat.color);
 
           return (
             <Link
@@ -120,11 +100,11 @@ export default async function Home() {
               <div className="relative z-10 flex justify-between items-start h-10 shrink-0">
                 {/* Tag chip */}
                 <span
+                  style={{ color: hexColor, borderColor: hexColor }}
                   className={`
-                    text-[11px] font-bold border border-white/25 px-3 py-[3px] rounded-sm text-gray-300 
+                    text-[11px] font-bold border px-3 py-[3px] rounded-sm 
                     transition-colors tracking-[0.22em]
-                    group-hover:text-[var(--theme-color)]
-                    group-hover:border-[var(--theme-color)]
+                    opacity-80 group-hover:opacity-100
                   `}
                 >
                   {cat.tag}

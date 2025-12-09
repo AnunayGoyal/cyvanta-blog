@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPostBySlug } from "@/lib/mdx";
+import { getPostBySlug, PostTag } from "@/lib/mdx";
 import { PortableText } from "next-sanity";
 import CodeWindow from "@/components/CodeWindow";
 import Table from "@/components/Table";
 import YouTube from "@/components/YouTube";
 import { urlFor } from "@/sanity/lib/image";
+import { getTagProps } from "@/lib/tags";
 
 // FORCE DYNAMIC RENDERING
 export const dynamic = "force-dynamic";
@@ -58,16 +59,7 @@ const ptComponents = {
   }
 };
 
-const getTagColor = (tag: string) => {
-  const t = tag.toLowerCase();
-  if (t.includes("signals") || t.includes("recon") || t.includes("research")) return "text-emerald-400 border-emerald-400/20 bg-emerald-400/5";
-  if (t.includes("vectors") || t.includes("offensive") || t.includes("ops") || t.includes("red team")) return "text-red-500 border-red-500/20 bg-red-500/5";
-  if (t.includes("protocols") || t.includes("hardening") || t.includes("defense")) return "text-cyan-400 border-cyan-400/20 bg-cyan-400/5";
-  if (t.includes("ai")) return "text-purple-400 border-purple-400/20 bg-purple-400/5";
-  if (t.includes("siem")) return "text-orange-400 border-orange-400/20 bg-orange-400/5";
-  if (t.includes("blue team")) return "text-blue-400 border-blue-400/20 bg-blue-400/5";
-  return "text-gray-400 border-gray-400/20 bg-gray-400/5";
-};
+
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -100,11 +92,22 @@ export default async function BlogPost({ params }: Props) {
 
         <header className="mb-12 border-b border-white/10 pb-8">
           <div className="flex gap-3 mb-6">
-            {tags && tags.map((tag: string) => (
-              <span key={tag} className={`text-xs font-bold border px-2 py-1 rounded uppercase tracking-wider ${getTagColor(tag)}`}>
-                {tag}
-              </span>
-            ))}
+            {tags && tags.map((tagObj: string | PostTag) => {
+              // Handle both legacy string tags and new object tags
+              const title = typeof tagObj === 'string' ? tagObj : tagObj.title;
+              const color = typeof tagObj === 'string' ? null : tagObj.color;
+              const props = getTagProps(title, color);
+
+              return (
+                <span
+                  key={title}
+                  className={props.className}
+                  style={props.style}
+                >
+                  {title}
+                </span>
+              );
+            })}
           </div>
 
           <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight mb-4 leading-tight">

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 export default function HeroTitle() {
   const [line1, setLine1] = useState("");
   const [line2, setLine2] = useState("");
-  
+
   const text1 = "Welcome to";
   const text2 = "CYVANTA";
 
@@ -40,7 +40,7 @@ export default function HeroTitle() {
   return (
     // FIX: Added 'min-h' constraints to ensure layout is stable before typing starts
     <div className="flex flex-col items-center justify-center w-full max-w-full overflow-hidden">
-      
+
       {/* LINE 1: Added 'min-h-[2rem]' to reserve space */}
       <div className="min-h-[2rem] md:min-h-[3rem] mb-2 flex items-center justify-center">
         <span className="text-sm md:text-2xl font-mono text-gray-400 tracking-[2px] md:tracking-[3px] text-center whitespace-nowrap">

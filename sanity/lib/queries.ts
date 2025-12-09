@@ -22,7 +22,7 @@ export const POSTS_QUERY = defineQuery(`
     "categoryTitle": category->title,
     "categoryColor": category->color,
     "categoryTag": category->tag,
-    tags
+    "tags": tags[]->{title, color, "slug": slug.current}
   }
 `);
 
@@ -35,7 +35,7 @@ export const POST_BY_SLUG_QUERY = defineQuery(`
     content,
     "categorySlug": category->slug.current,
     "categoryTitle": category->title,
-    tags,
+    "tags": tags[]->{title, color, "slug": slug.current},
     "author": author->{name, "slug": slug.current, image, bio}
   }
 `);
@@ -47,6 +47,6 @@ export const POSTS_BY_CATEGORY_QUERY = defineQuery(`
     "date": _createdAt,
     summary,
     "categorySlug": category->slug.current,
-    tags
+    "tags": tags[]->{title, color, "slug": slug.current}
   }
 `);

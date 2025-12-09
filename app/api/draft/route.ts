@@ -1,23 +1,24 @@
-import { validatePreviewUrl } from '@sanity/preview-url-secret'
 import { draftMode } from 'next/headers'
 import { redirect } from 'next/navigation'
-
-import { client } from '@/sanity/lib/client'
-import { token } from '@/sanity/lib/token'
-
-const clientWithToken = client.withConfig({ token })
-
+// Simplified draft handler for Iframe usage
 export async function GET(request: Request) {
-    const { isValid, redirectTo = '/' } = await validatePreviewUrl(
-        clientWithToken,
-        request.url,
-    )
+    const { searchParams } = new URL(request.url)
+    const slug = searchParams.get('slug')
+    const type = searchParams.get('type')
 
-    if (!isValid) {
-        return new Response('Invalid secret', { status: 401 })
+    if (!slug) {
+        return new Response('Missing slug', { status: 400 })
     }
 
+    // Enable draft mode
     (await draftMode()).enable()
 
-    redirect(redirectTo)
+    // Redirect to the correct path
+    if (type === 'post') {
+        redirect(`/blog/${slug}`)
+    } else if (type === 'category') {
+        redirect(`/blog/category/${slug}`)
+    } else {
+        redirect('/')
+    }
 }

@@ -18,7 +18,7 @@ export default function Navbar() {
             className="object-contain"
             priority
           />
-          <span className="font-mono font-bold text-xl tracking-tight text-white">
+          <span className="font-mono font-bold text-2xl tracking-tight text-white">
             CYVANTA<span className="text-primary">_</span>
           </span>
         </Link>

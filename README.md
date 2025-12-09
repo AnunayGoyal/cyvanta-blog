@@ -1,103 +1,43 @@
-# CYVANTA — Security Research Platform
+# Cyvanta - Advanced Security Research Blog
 
-This is the official codebase for **CYVANTA**, a modern cybersecurity research platform built using **Next.js**, **Sanity CMS**, and **TailwindCSS**.
-It powers a structured, category-driven system for publishing research on:
+A high-performance, aesthetically driven cybersecurity blog built with Next.js 14, Tailwind CSS, and Sanity CMS.
 
-- Cloud Security
-- Threat Intelligence
-- Red Team & Offensive Operations
-- Defense Mechanisms
-- Malware & Analysis
-- And more…
+## Key Features
 
-The platform is deployed on **Vercel** and designed for high performance, extendability, and a premium cyber-themed UI.
+### 1. Immersive "Hacker" Aesthetic
+- **Design System**: Custom dark mode with "zinc" and "emerald" accents, scanline animations, and terminal-style typography.
+- **Micro-interactions**: Hover effects, glowing borders, and dynamic grid backgrounds.
+- **Responsive**: Fully optimized layouts for mobile, tablet, and desktop.
 
----
+### 2. Powerful Content Management (Sanity Studio)
+- **Universal Live Preview**: A consistently accurate real-time preview for **Posts**, **Categories**, **Authors**, and **Tags**.
+- **Split-Pane Editing**: Edit content on the left, see the result on the right instantly.
+- **Category Card Preview**: A dedicated view to visualize exactly how categories appear in the website grid layout.
+- **Hex Color Standardization**: All tags and categories use a centralized Hex color palette, ensuring absolute visual consistency between the Studio and the Website.
 
-## 🚀 Getting Started
+### 3. Modern Tech Stack
+- **Framework**: Next.js 14 (App Router)
+- **CMS**: Sanity (v3) with Visual Editing support
+- **Styling**: Tailwind CSS + Framer Motion
+- **Performance**: Optimized font loading, image handling, and static generation.
 
-Install dependencies:
+## Getting Started
 
-```bash
-npm install
-```
+1.  **Install Dependencies**:
+    ```bash
+    npm install
+    ```
 
-Run development server:
+2.  **Run Development Server**:
+    ```bash
+    npm run dev
+    ```
 
-```bash
-npm run dev
-```
+3.  **Open Studio**:
+    Visit `http://localhost:3000/studio` to manage content.
 
-Visit **http://localhost:3000** for the frontend.
-Visit **http://localhost:3000/studio** to access the Content Management System.
-
----
-
-## 📁 Project Structure
-
-```
-cyvanta-blog/
-├── app/                  # Next.js App Router
-├── components/           # UI Components
-├── sanity/               # Sanity CMS config & schemas
-│   ├── schemas/          # Content types (Post, Category, Author)
-│   └── env.ts            # Environment variables
-├── public/               # Static assets
-└── package.json
-```
-
----
-
-## 📝 Writing New Articles
-
-Content is managed via **Sanity Studio**.
-
-1. Navigate to `http://localhost:3000/studio`.
-2. Login (if required).
-3. Create a new **Post**.
-   - **Title & Slug**: Article header.
-   - **Category**: Classify under Cloud Sec, Threat Intel, etc.
-   - **Content**: Rich text editor with support for:
-     - Code blocks (for exploits/scripts)
-     - Callouts (Info/Warning/Danger)
-     - Images
-   - **Author**: Link to an author profile.
-
-Posts will automatically appear in category pages and search results.
-
----
-
-## 🔍 Features
-
-- **Sanity CMS**: Real-time content management with a custom schema.
-- **Rich Content Support**: Code blocks, custom callouts, and rich text.
-- **Global Search**: Filter by category and tags.
-- **Cyberpunk UI**: Premium dark-mode design with grid backgrounds.
-- **Fully Responsive**: Optimized for all devices.
-
----
-
-## 📦 Deployment
-
-Push to GitHub → Vercel auto-builds.
-
-**Environment Variables Required:**
-- `NEXT_PUBLIC_SANITY_PROJECT_ID`
-- `NEXT_PUBLIC_SANITY_DATASET`
-
----
-
-## ⚡ Tech Stack
-
-- **Framework**: Next.js 16
-- **CMS**: Sanity (w/ Studio)
-- **Styling**: TailwindCSS
-- **Language**: TypeScript / JavaScript
-- **Hosting**: Vercel
-
----
-
-## 🙌 Author
-
-**Anunay Goyal**
-Portfolio: https://anunaygoyal.github.io/portfolio
+## Project Structure
+- `/app`: Next.js App Router pages (Website & Studio).
+- `/components`: Reusable UI components (Navbar, Footer, Hero, etc.).
+- `/lib`: Utilities (Sanity queries, color helpers, etc.).
+- `/sanity`: Schema definitions and Studio configuration.

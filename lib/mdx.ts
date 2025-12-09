@@ -28,13 +28,30 @@ export async function getCategories(): Promise<CategoryMeta[]> {
 /*                                Single Post                                 */
 /* -------------------------------------------------------------------------- */
 
+import { draftMode } from "next/headers";
+import { token } from "@/sanity/lib/token";
+
+async function getClient() {
+  const { isEnabled } = await draftMode();
+  if (isEnabled && token) {
+    return client.withConfig({ token, useCdn: false, stega: true });
+  }
+  return client;
+}
+
 export async function getPostBySlug(slug: string) {
-  return await client.fetch(POST_BY_SLUG_QUERY, { slug });
+  return await (await getClient()).fetch(POST_BY_SLUG_QUERY, { slug });
 }
 
 /* -------------------------------------------------------------------------- */
 /*                             Posts by Category                              */
 /* -------------------------------------------------------------------------- */
+
+export type PostTag = {
+  title: string;
+  color?: string;
+  slug: string;
+};
 
 export type PostMeta = {
   slug: string;
@@ -42,7 +59,7 @@ export type PostMeta = {
   date?: string;
   summary?: string;
   categorySlug: string;
-  tags?: string[];
+  tags?: PostTag[];
   categoryTitle?: string;
   categoryColor?: string;
   categoryTag?: string;
@@ -51,7 +68,7 @@ export type PostMeta = {
 export type FullPostMeta = PostMeta;
 
 export async function getPostsByCategorySlug(categorySlug: string): Promise<PostMeta[]> {
-  return await client.fetch(POSTS_BY_CATEGORY_QUERY, { categorySlug });
+  return await (await getClient()).fetch(POSTS_BY_CATEGORY_QUERY, { categorySlug });
 }
 
 /**
@@ -72,8 +89,8 @@ export async function getAllTags(): Promise<string[]> {
 
   for (const post of posts) {
     (post.tags ?? []).forEach((t) => {
-      if (t && typeof t === "string") {
-        tagSet.add(t);
+      if (t?.title) {
+        tagSet.add(t.title);
       }
     });
   }
@@ -94,7 +111,8 @@ export async function getRelatedPosts(
 
   if (!current) return [];
 
-  const currentTags = new Set(current.tags ?? []);
+  // Create set of current tag SLUGS for reliable comparison
+  const currentTagSlugs = new Set((current.tags ?? []).map(t => t.slug));
 
   // Score other posts
   const scored = posts
@@ -106,7 +124,7 @@ export async function getRelatedPosts(
       if (p.categorySlug === current.categorySlug) score += 2;
 
       // Shared tags → +1 per tag
-      const sharedTags = (p.tags ?? []).filter((t) => currentTags.has(t));
+      const sharedTags = (p.tags ?? []).filter((t) => currentTagSlugs.has(t.slug));
       score += sharedTags.length;
 
       return { post: p, score };

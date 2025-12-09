@@ -42,7 +42,7 @@ export const categoryType = defineType({
       name: 'color',
       title: 'Color',
       type: 'string',
-      description: 'color name or hex (eg. emerald or #10b981)',
+      description: 'Hex code preferred (e.g. #10b981). Legacy color names are supported but auto-converted.',
     }),
   ],
 })
