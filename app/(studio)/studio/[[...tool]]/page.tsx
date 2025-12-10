@@ -9,6 +9,7 @@
 
 import { metadata, viewport } from 'next-sanity/studio'
 import Studio from './Studio'
+import './studio.css'
 
 // Set the correct metadata for the Studio page
 export { metadata, viewport }

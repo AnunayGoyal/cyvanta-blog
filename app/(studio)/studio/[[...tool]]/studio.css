@@ -1,0 +1,138 @@
+/* --- Sanity Studio Global Theme Overrides --- */
+
+:root {
+    /* Core Colors */
+    --bg-color: #030303;
+    --bg-overlay: rgba(10, 10, 10, 0.6);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --accent-color: #4ade80;
+    /* Green accent matching site */
+    --text-primary: #e4e4e7;
+    --text-secondary: #a1a1aa;
+
+    /* Sanity CSS Variable Overrides - Force Dark Mode visuals */
+    --card-bg-color: transparent !important;
+    --card-fg-color: var(--text-primary) !important;
+    --card-focus-ring-color: var(--accent-color) !important;
+    --card-link-color: var(--accent-color) !important;
+    --card-hairline-soft-color: var(--border-color) !important;
+    --card-hairline-hard-color: var(--border-color) !important;
+
+    /* Panels */
+    --default-button-primary-color: var(--accent-color) !important;
+}
+
+body,
+html,
+#__next {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+}
+
+/* 1. Main Background with Gradient & Grid */
+.sanity-studio__root {
+    background-color: var(--bg-color) !important;
+    background-image:
+        radial-gradient(circle at 50% -20%, #1a1a1a 0%, transparent 60%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px) !important;
+    background-size: 100% 100%, 40px 40px, 40px 40px !important;
+    background-attachment: fixed;
+}
+
+/* 2. Make Panes Transparent (Glassmorphism) */
+[data-ui="Pane"] {
+    background-color: rgba(5, 5, 5, 0.45) !important;
+    backdrop-filter: blur(12px) !important;
+    border-right: 1px solid var(--border-color) !important;
+}
+
+[data-ui="PaneContent"] {
+    background-color: transparent !important;
+}
+
+[data-ui="PaneHeader"] {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+/* 3. Navbar Styling */
+[data-ui="Navbar"] {
+    background-color: rgba(3, 3, 3, 0.8) !important;
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+/* 4. Input Fields (Text, Select, etc.) */
+/* Sanity inputs usually live in cards or specific wrapper divs */
+input,
+textarea,
+select,
+[data-ui="TextInput"],
+[data-ui="TextArea"] {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid var(--border-color) !important;
+    color: #fff !important;
+    transition: all 0.2s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 0 1px var(--accent-color) !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* 5. Buttons */
+button[data-ui="Button"] {
+    font-weight: 600 !important;
+}
+
+/* Primary Action Buttons */
+button[data-ui="Button"][data-tone="primary"] {
+    background-color: var(--accent-color) !important;
+    color: #000 !important;
+}
+
+/* 6. Text Editor / PTE Overrides */
+[data-testid="pt-editor"] {
+    background: transparent !important;
+}
+
+/* 7. Card / Item Hover States */
+[data-ui="Card"]:hover {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+/* 8. Widen Editor Container & Simulate Full Screen */
+[data-ui="PaneContent"]>div:first-child {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 2rem !important;
+    /* Add some breathing room but keep it wide */
+}
+
+/* 9. Fix Full Screen Modal (Portal/Dialog) */
+/* This targets the actual "Full Screen" toggle in the editor which opens a portal */
+[data-ui="Portal"] [data-ui="Dialog"] {
+    background-color: #030303 !important;
+    /* Match var(--bg-color) */
+    opacity: 1 !important;
+    box-shadow: none !important;
+}
+
+[data-ui="Portal"] [data-ui="Dialog"] [data-ui="Card"] {
+    background-color: #030303 !important;
+}
+
+/* Ensure the portal sits on top of everything */
+[data-ui="Portal"] {
+    position: relative;
+    z-index: 9999 !important;
+}
+
+/* Hide the "Content" Field Label to look more like a doc */
+[data-testid="field-content"]>label {
+    display: none !important;
+}

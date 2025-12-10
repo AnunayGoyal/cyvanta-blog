@@ -1,5 +1,8 @@
 'use client'
 
+import './sanity/studio.css'
+
+
 /**
  * This configuration is used to for the Sanity Studio that’s mounted on the `\app\studio\[[...tool]]\page.tsx` route
  */
@@ -27,7 +30,7 @@ export default defineConfig({
   },
   plugins: [
     structureTool({
-      title: 'Content',
+      title: 'Dashboard',
       icon: HomeIcon,
       structure,
       defaultDocumentNode

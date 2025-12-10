@@ -1,0 +1,49 @@
+/* Global override for Sanity Studio Form Width */
+
+/* 1. Container Layout & Padding */
+[data-testid="document-pane"] [data-ui="Scroller"]>div:first-child {
+    max-width: none !important;
+    width: 100% !important;
+    padding: 24px !important;
+    /* Increased padding as requested */
+    box-sizing: border-box;
+}
+
+/* 2. Reset Internal Constraints */
+[data-testid="document-pane"] [data-ui="Container"] {
+    max-width: none !important;
+    width: 100% !important;
+    padding: 0 !important;
+}
+
+[data-testid="document-pane"] form {
+    max-width: none !important;
+    width: 100% !important;
+}
+
+/* 3. Reduce Gaps (Vertical Spacing) */
+/* Reduce gap between field groups and main stack items */
+[data-testid="document-pane"] [data-ui="Stack"] {
+    gap: 12px !important;
+    /* Reduced "gp" between divs */
+}
+
+/* Specifically target the field grid if it uses Grid instead of Stack */
+[data-testid="document-pane"] [data-ui="Grid"] {
+    gap: 12px !important;
+    max-width: none !important;
+}
+
+/* 4. Menu / Header Fixes */
+/* Ensure the tab list doesn't stretch awkwardly */
+[data-testid="document-pane"] [data-ui="TabList"] {
+    width: auto !important;
+    max-width: 100%;
+    margin-bottom: 12px !important;
+    /* Reduce space below tabs */
+}
+
+/* Ensure bottom action bar is safe */
+[data-testid="document-pane"] [data-ui="FloatBox"] {
+    max-width: none !important;
+}

@@ -5,7 +5,7 @@ import StudioPreview from './components/StudioPreview'
 
 export const structure: StructureResolver = (S) =>
   S.list()
-    .title('Cyvanta Content')
+    .title('Dashboard')
     .items([
       S.documentTypeListItem('post').title('Posts'),
       S.divider(),
@@ -44,6 +44,15 @@ export const defaultDocumentNode: DefaultDocumentNodeResolver = (S, { schemaType
 
   // Enable for relevant types
   if (['post', 'category', 'author', 'tag'].includes(schemaType)) {
+    if (schemaType === 'post') {
+      return S.document().views([
+        S.view
+          .component(StudioPreview)
+          .options({ type: schemaType, mode: 'normal' })
+          .title('Live Preview'),
+        S.view.form()
+      ])
+    }
     return S.document().views(views)
   }
 
