@@ -4,7 +4,7 @@
 [data-testid="document-pane"] [data-ui="Scroller"]>div:first-child {
     max-width: none !important;
     width: 100% !important;
-    padding: 24px !important;
+    padding: 24px 2rem !important;
     /* Increased padding as requested */
     box-sizing: border-box;
 }

@@ -4,7 +4,7 @@
     /* Core Colors */
     --bg-color: #030303;
     --bg-overlay: rgba(10, 10, 10, 0.6);
-    --border-color: rgba(255, 255, 255, 0.08);
+    --border-color: rgba(255, 255, 255, 0.2);
     --accent-color: #4ade80;
     /* Green accent matching site */
     --text-primary: #e4e4e7;
@@ -20,13 +20,20 @@
 
     /* Panels */
     --default-button-primary-color: var(--accent-color) !important;
+
+    /* Global Font Overrides for Terminal Theme */
+    --font-family-base: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace !important;
+    --font-family-header: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace !important;
+    --font-family-monospace: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace !important;
 }
 
 body,
 html,
-#__next {
+#__next,
+.sanity-studio__root {
     background-color: var(--bg-color);
     color: var(--text-primary);
+    font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace !important;
 }
 
 /* 1. Main Background with Gradient & Grid */
@@ -65,20 +72,21 @@ html,
 
 /* 4. Input Fields (Text, Select, etc.) */
 /* Sanity inputs usually live in cards or specific wrapper divs */
-input,
-textarea,
-select,
-[data-ui="TextInput"],
-[data-ui="TextArea"] {
+[data-testid="document-pane"] input,
+[data-testid="document-pane"] textarea,
+[data-testid="document-pane"] select,
+[data-testid="document-pane"] [data-ui="TextInput"],
+[data-testid="document-pane"] [data-ui="TextArea"] {
     background-color: rgba(255, 255, 255, 0.03) !important;
     border: 1px solid var(--border-color) !important;
     color: #fff !important;
+    padding: 10px 12px !important;
     transition: all 0.2s ease;
 }
 
-input:focus,
-textarea:focus,
-select:focus {
+[data-testid="document-pane"] input:focus,
+[data-testid="document-pane"] textarea:focus,
+[data-testid="document-pane"] select:focus {
     border-color: var(--accent-color) !important;
     box-shadow: 0 0 0 1px var(--accent-color) !important;
     background-color: rgba(255, 255, 255, 0.05) !important;
@@ -98,19 +106,43 @@ button[data-ui="Button"][data-tone="primary"] {
 /* 6. Text Editor / PTE Overrides */
 [data-testid="pt-editor"] {
     background: transparent !important;
+    padding: 12px 16px !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 4px !important;
+}
+
+/* Force full width for ALL internal editor containers */
+[data-testid="pt-editor"] [data-ui="Container"],
+[data-testid="pt-editor"] [data-ui="Stack"],
+[data-testid="pt-editor"] [data-slate-editor="true"],
+[data-testid="pt-editor"] [data-slate-node="value"],
+[data-testid="pt-editor"] [data-slate-node="element"],
+[data-testid="pt-editor"] div {
+    max-width: none !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* Ensure the text blocks themselves aren't centered */
+[data-testid="pt-editor"] [data-slate-node="block"] {
+    max-width: none !important;
+    width: 100% !important;
 }
 
 /* 7. Card / Item Hover States */
-[data-ui="Card"]:hover {
-    background-color: rgba(255, 255, 255, 0.02) !important;
-}
+
 
 /* 8. Widen Editor Container & Simulate Full Screen */
-[data-ui="PaneContent"]>div:first-child {
-    max-width: 100% !important;
-    width: 100% !important;
-    padding: 0 2rem !important;
-    /* Add some breathing room but keep it wide */
+[data-testid="document-pane"] [data-ui="Scroller"]>div:first-child {
+    max-width: 1200px !important;
+    width: calc(100% - 3rem) !important;
+    margin: 1.5rem auto !important;
+    padding: 2rem !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 8px !important;
+    background-color: rgba(255, 255, 255, 0.01) !important;
+    box-sizing: border-box !important;
 }
 
 /* 9. Fix Full Screen Modal (Portal/Dialog) */

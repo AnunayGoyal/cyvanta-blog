@@ -45,7 +45,7 @@ export default function BulkDeleteTool() {
         if (selected.size === posts.length) {
             setSelected(new Set())
         } else {
-            
+
             setSelected(new Set(posts.map(p => p._id)))
         }
     }
