@@ -1,52 +1,59 @@
 export default function Loading() {
     return (
-        <div className="fixed inset-0 bg-black z-[9999] flex flex-col items-center justify-center font-mono text-white select-none">
-            <div className="flex flex-col items-center gap-8 w-full max-w-lg px-4">
+        <div className="fixed inset-0 bg-[#000000] z-[9999] flex flex-col items-center justify-center font-mono text-sm md:text-base text-gray-300 select-none overflow-hidden p-4 md:p-8">
 
-                {/* Title Section */}
-                <div className="text-center space-y-2">
-                    <h1 className="text-4xl md:text-5xl font-bold tracking-wider animate-pulse">
-                        CYVANTA
-                    </h1>
-                    <p className="text-sm md:text-base text-gray-500 tracking-[0.2em] uppercase">
-                        System Initialization
-                    </p>
+            {/* Terminal Container - Centered */}
+            <div className="w-full max-w-[800px] flex flex-col gap-1 items-center md:items-start text-center md:text-left transition-all duration-500">
+
+                {/* Boot Sequence Lines */}
+                <div className="flex gap-4 items-center whitespace-nowrap animate-[fadeIn_0s_linear_0.1s_both]">
+                    <span><span className="text-gray-300">[</span> <span className="text-emerald-500 font-bold">&nbsp;&nbsp;OK&nbsp;&nbsp;</span> <span className="text-gray-300">]</span></span>
+                    <span className="text-white">Started Cyvanta Kernel Security.</span>
                 </div>
 
-                {/* Status Text */}
-                <div className="mt-8 flex flex-col items-center gap-2">
-                    <p className="text-sm text-gray-400 tracking-widest uppercase flex items-center gap-2">
-                        Initialize Neural Network
-                        <span className="animate-[blink_1s_infinite]">_</span>
-                    </p>
+                <div className="flex gap-4 items-center whitespace-nowrap animate-[fadeIn_0s_linear_0.2s_both]">
+                    <span><span className="text-gray-300">[</span> <span className="text-emerald-500 font-bold">&nbsp;&nbsp;OK&nbsp;&nbsp;</span> <span className="text-gray-300">]</span></span>
+                    <span className="text-white">Mounted Content Filesystem.</span>
                 </div>
 
-                {/* Progress Bar Container */}
-                <div className="w-full h-[2px] bg-gray-900 rounded-full overflow-hidden relative">
-                    {/* Animated Bar */}
-                    <div
-                        className="absolute top-0 left-0 h-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)] animate-[loading_2s_ease-in-out_infinite]"
-                        style={{ width: '100%' }}
-                    />
+                <div className="flex gap-4 items-center whitespace-nowrap animate-[fadeIn_0s_linear_0.3s_both]">
+                    <span><span className="text-gray-300">[</span> <span className="text-emerald-500 font-bold">&nbsp;&nbsp;OK&nbsp;&nbsp;</span> <span className="text-gray-300">]</span></span>
+                    <span className="text-white">Reached target Graphical Interface.</span>
                 </div>
 
-                {/* Status Percentage (Static simulation) */}
-                <p className="text-[10px] text-gray-600 tracking-widest">
-                    ESTABLISHING SECURE CONNECTION...
-                </p>
+                <div className="flex gap-4 items-center whitespace-nowrap animate-[fadeIn_0s_linear_0.4s_both]">
+                    <span><span className="text-gray-300">[</span> <span className="text-emerald-500 font-bold">&nbsp;&nbsp;OK&nbsp;&nbsp;</span> <span className="text-gray-300">]</span></span>
+                    <span className="text-white">Started Network Manager Override.</span>
+                </div>
+
+                <div className="flex gap-4 items-center whitespace-nowrap animate-[fadeIn_0s_linear_0.6s_both]">
+                    <span><span className="text-gray-300">[</span> <span className="text-emerald-500 font-bold">&nbsp;&nbsp;OK&nbsp;&nbsp;</span> <span className="text-gray-300">]</span></span>
+                    <span className="text-white">Initialized React Server Components.</span>
+                </div>
+
+                <div className="flex gap-4 items-center whitespace-nowrap animate-[fadeIn_0s_linear_0.8s_both]">
+                    <span><span className="text-gray-300">[</span> <span className="text-emerald-500 font-bold">&nbsp;&nbsp;OK&nbsp;&nbsp;</span> <span className="text-gray-300">]</span></span>
+                    <span className="text-white">Starting User Session...</span>
+                </div>
+
+                {/* Cinematic Access Granted */}
+                <div className="mt-8 flex items-center justify-center w-full gap-2 animate-[fadeIn_0.5s_ease-out_1.5s_both]">
+                    <span className="text-2xl md:text-3xl font-bold text-emerald-500 tracking-[0.2em] uppercase drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]">
+                        ACCESS GRANTED
+                    </span>
+                    <span className="w-3 h-6 md:h-8 bg-emerald-500 animate-[blink_1s_step-end_infinite]" />
+                </div>
 
             </div>
 
-            {/* Tailwind/CSS Animations */}
             <style>{`
-        @keyframes loading {
-          0% { transform: translateX(-100%); }
-          50% { transform: translateX(0%); }
-          100% { transform: translateX(100%); }
-        }
         @keyframes blink {
           0%, 100% { opacity: 1; }
           50% { opacity: 0; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
       `}</style>
         </div>

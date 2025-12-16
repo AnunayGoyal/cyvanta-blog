@@ -31,23 +31,78 @@ A high-performance, aesthetically driven cybersecurity blog built with Next.js 1
 - **Styling**: Tailwind CSS + Framer Motion
 - **Performance**: Optimized font loading, image handling, and static generation.
 
-## Getting Started
+## Using this Project
 
-1.  **Install Dependencies**:
+This project is open-source and designed to be easily forked and customized. You can "cache" (download) the code to use as a starting point for your own blog.
+
+### Quick Start (Fork & Run)
+
+1.  **Clone the Repository**:
+    ```bash
+    git clone https://github.com/AnunayGoyal/cyvanta-blog.git
+    cd cyvanta-blog
+    ```
+
+2.  **Install Dependencies**:
     ```bash
     npm install
     ```
 
-2.  **Run Development Server**:
+3.  **Environment Setup**:
+    Create a `.env.local` file in the root directory. You will need a Sanity project ID and dataset.
+    ```env
+    NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
+    NEXT_PUBLIC_SANITY_DATASET=production
+    ```
+
+4.  **Run Development Server**:
     ```bash
     npm run dev
     ```
 
-3.  **Open Studio**:
-    Visit `http://localhost:3000/studio` to manage content.
+5.  **Access the App**:
+    - Website: `http://localhost:3000`
+    - Studio: `http://localhost:3000/studio`
+
+### Customization
+
+-   **Colors**: Edit `tailwind.config.ts` to change the `zinc` and `emerald` color palettes.
+-   **Content**: Go to `/sanity/schemaTypes` to modify the content models.
+-   **Aesthetics**: Check `app/globals.css` for base styles and scanline effects.
+
+---
+
+## Docker Support
+
+This application is container-ready with a multi-stage Dockerfile optimized for production performance.
+
+### Running with Docker Compose (Recommended)
+
+The easiest way to run the application is using Docker Compose, which handles the build and network setup for you.
+
+```bash
+docker-compose up --build
+```
+This will start the application on port 3000.
+
+### Manual Docker Build
+
+If you prefer to build the image manually:
+
+1.  **Build the Image**:
+    ```bash
+    docker build -t cyvanta-app .
+    ```
+
+2.  **Run the Container**:
+    ```bash
+    docker run -p 3000:3000 cyvanta-app
+    ```
 
 ## Project Structure
-- `/app`: Next.js App Router pages (Website & Studio).
-- `/components`: Reusable UI components (Navbar, Footer, Hero, etc.).
-- `/lib`: Utilities (Sanity queries, color helpers, etc.).
-- `/sanity`: Schema definitions and Studio configuration.
+
+-   `/app`: Next.js App Router pages (Website & Studio).
+-   `/components`: Reusable UI components (Navbar, Footer, Hero, etc.).
+-   `/lib`: Utilities (Sanity queries, color helpers, etc.).
+-   `/sanity`: Schema definitions and Studio configuration.
+-   `/public`: Static assets (images, fonts).

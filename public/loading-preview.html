@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyvanta Loading Preview</title>
+    <style>
+        /* Linux Terminal Theme - Cinematic Center */
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #000000;
+            color: #d1d5db;
+            /* gray-300 */
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            user-select: none;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Center vertically and horizontally */
+        }
+
+        .terminal-window {
+            width: 100%;
+            max-width: 800px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            /* Optional: Add a subtle glow or border for the "window" feel */
+            /* border: 1px solid #333; */
+            /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); */
+        }
+
+        .line {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            opacity: 0;
+            white-space: nowrap;
+        }
+
+        .status {
+            font-weight: bold;
+            color: #10b981;
+            /* emerald-500 */
+        }
+
+        .brackets {
+            color: #d1d5db;
+        }
+
+        .message {
+            color: #ffffff;
+        }
+
+        .access-granted-container {
+            margin-top: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 1.5s both;
+        }
+
+        .access-text {
+            color: #10b981;
+            /* emerald-500 for success feel, or #E63E32 for red */
+            font-size: 2rem;
+            font-weight: bold;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .animate-line-1 {
+            animation: fadeIn 0s linear 0.1s both;
+        }
+
+        .animate-line-2 {
+            animation: fadeIn 0s linear 0.2s both;
+        }
+
+        .animate-line-3 {
+            animation: fadeIn 0s linear 0.3s both;
+        }
+
+        .animate-line-4 {
+            animation: fadeIn 0s linear 0.4s both;
+        }
+
+        .animate-line-5 {
+            animation: fadeIn 0s linear 0.6s both;
+        }
+
+        .animate-line-6 {
+            animation: fadeIn 0s linear 0.8s both;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 0.6em;
+            height: 1.2em;
+            background-color: #10b981;
+            /* Match access text */
+            animation: blink 1s step-end infinite;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="terminal-window">
+        <!-- Boot Sequence -->
+        <div class="line animate-line-1">
+            <span><span class="brackets">[</span> <span class="status">&nbsp;&nbsp;OK&nbsp;&nbsp;</span> <span
+                    class="brackets">]</span></span>
+            <span class="message">Started Cyvanta Kernel Security.</span>
+        </div>
+        <div class="line animate-line-2">
+            <span><span class="brackets">[</span> <span class="status">&nbsp;&nbsp;OK&nbsp;&nbsp;</span> <span
+                    class="brackets">]</span></span>
+            <span class="message">Mounted Content Filesystem.</span>
+        </div>
+        <div class="line animate-line-3">
+            <span><span class="brackets">[</span> <span class="status">&nbsp;&nbsp;OK&nbsp;&nbsp;</span> <span
+                    class="brackets">]</span></span>
+            <span class="message">Reached target Graphical Interface.</span>
+        </div>
+        <div class="line animate-line-4">
+            <span><span class="brackets">[</span> <span class="status">&nbsp;&nbsp;OK&nbsp;&nbsp;</span> <span
+                    class="brackets">]</span></span>
+            <span class="message">Started Network Manager Override.</span>
+        </div>
+        <div class="line animate-line-5">
+            <span><span class="brackets">[</span> <span class="status">&nbsp;&nbsp;OK&nbsp;&nbsp;</span> <span
+                    class="brackets">]</span></span>
+            <span class="message">Initialized React Server Components.</span>
+        </div>
+        <div class="line animate-line-6">
+            <span><span class="brackets">[</span> <span class="status">&nbsp;&nbsp;OK&nbsp;&nbsp;</span> <span
+                    class="brackets">]</span></span>
+            <span class="message">Starting User Session...</span>
+        </div>
+
+        <!-- Cinematic Access Granted -->
+        <div class="access-granted-container">
+            <span class="access-text">ACCESS GRANTED</span>
+            <span class="cursor"></span>
+        </div>
+    </div>
+
+</body>
+
+</html>
