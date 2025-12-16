@@ -86,7 +86,8 @@ export async function getAllTags(): Promise<string[]> {
 
   for (const post of posts) {
     (post.tags ?? []).forEach((t) => {
-      if (t) {
+      // Ensure t is a string (legacy data might be objects if query fails migration logic)
+      if (t && typeof t === 'string') {
         tagSet.add(t);
       }
     });
