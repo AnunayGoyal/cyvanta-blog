@@ -92,19 +92,16 @@ export default async function BlogPost({ params }: Props) {
 
         <header className="mb-12 border-b border-white/10 pb-8">
           <div className="flex gap-3 mb-6">
-            {tags && tags.map((tagObj: string | PostTag) => {
-              // Handle both legacy string tags and new object tags
-              const title = typeof tagObj === 'string' ? tagObj : tagObj.title;
-              const color = typeof tagObj === 'string' ? null : tagObj.color;
-              const props = getTagProps(title, color);
+            {tags && tags.map((tag: string) => {
+              const props = getTagProps(tag, null);
 
               return (
                 <span
-                  key={title}
+                  key={tag}
                   className={props.className}
                   style={props.style}
                 >
-                  {title}
+                  {tag}
                 </span>
               );
             })}

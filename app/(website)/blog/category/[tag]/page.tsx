@@ -95,15 +95,15 @@ export default async function CategoryPage({
               </span>
 
               {/* Post Tags */}
-              {post.tags?.map((tagObj) => {
-                const props = getTagProps(tagObj.title, tagObj.color);
+              {post.tags?.map((tag) => {
+                const props = getTagProps(tag, null);
                 return (
                   <span
-                    key={tagObj.slug}
+                    key={tag}
                     className={props.className}
                     style={props.style}
                   >
-                    {tagObj.title}
+                    {tag}
                   </span>
                 )
               })}

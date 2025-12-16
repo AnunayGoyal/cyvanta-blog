@@ -77,9 +77,12 @@ export const postType = defineType({
     defineField({
       name: 'tags',
       title: 'Sub Tags',
-      description: 'Additional topics related to this post',
+      description: 'Ad-hoc topics for this post (no separate document required)',
       type: 'array',
-      of: [{ type: 'reference', to: { type: 'tag' } }],
+      of: [{ type: 'string' }],
+      options: {
+        layout: 'tags',
+      },
       group: 'settings',
     }),
     defineField({

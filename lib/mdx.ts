@@ -47,11 +47,8 @@ export async function getPostBySlug(slug: string) {
 /*                             Posts by Category                              */
 /* -------------------------------------------------------------------------- */
 
-export type PostTag = {
-  title: string;
-  color?: string;
-  slug: string;
-};
+
+export type PostTag = string;
 
 export type PostMeta = {
   slug: string;
@@ -59,7 +56,7 @@ export type PostMeta = {
   date?: string;
   summary?: string;
   categorySlug: string;
-  tags?: PostTag[];
+  tags?: string[];
   categoryTitle?: string;
   categoryColor?: string;
   categoryTag?: string;
@@ -89,8 +86,8 @@ export async function getAllTags(): Promise<string[]> {
 
   for (const post of posts) {
     (post.tags ?? []).forEach((t) => {
-      if (t?.title) {
-        tagSet.add(t.title);
+      if (t) {
+        tagSet.add(t);
       }
     });
   }
@@ -111,8 +108,8 @@ export async function getRelatedPosts(
 
   if (!current) return [];
 
-  // Create set of current tag SLUGS for reliable comparison
-  const currentTagSlugs = new Set((current.tags ?? []).map(t => t.slug));
+  // Create set of current tags for reliable comparison
+  const currentTags = new Set((current.tags ?? []));
 
   // Score other posts
   const scored = posts
@@ -124,7 +121,7 @@ export async function getRelatedPosts(
       if (p.categorySlug === current.categorySlug) score += 2;
 
       // Shared tags → +1 per tag
-      const sharedTags = (p.tags ?? []).filter((t) => currentTagSlugs.has(t.slug));
+      const sharedTags = (p.tags ?? []).filter((t) => currentTags.has(t));
       score += sharedTags.length;
 
       return { post: p, score };
