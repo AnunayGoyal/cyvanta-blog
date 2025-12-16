@@ -3,15 +3,34 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 5, 5, 5;
-  --background-end-rgb: 5, 5, 5;
+  /* Light Mode Defaults (Clean Paper Aesthetic) */
+  --background: 250, 250, 250;
+  /* Slightly off-white #FAFAFA */
+  --surface: 255, 255, 255;
+  /* Pure white */
+  --foreground: 23, 23, 23;
+  /* #171717 */
+  --muted: 115, 115, 115;
+  /* #737373 */
+}
+
+.dark {
+  /* Dark Mode Defaults (Original Cyberpunk) */
+  --background: 5, 5, 5;
+  /* #050505 */
+  --surface: 15, 15, 15;
+  /* #0F0F0F */
+  --foreground: 255, 255, 255;
+  /* #FFFFFF */
+  --muted: 156, 163, 175;
+  /* Gray-400 */
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-start-rgb));
+  color: rgb(var(--foreground));
+  background: rgb(var(--background));
   font-family: var(--font-mono), monospace;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* RESPONSIVE SCALING: Fluid Root Sizing */

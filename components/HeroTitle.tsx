@@ -43,18 +43,18 @@ export default function HeroTitle() {
 
       {/* LINE 1: Added 'min-h-[2rem]' to reserve space */}
       <div className="min-h-[2rem] md:min-h-[3rem] mb-2 flex items-center justify-center">
-        <span className="text-sm md:text-2xl font-mono text-gray-400 tracking-[2px] md:tracking-[3px] text-center whitespace-nowrap">
+        <span className="text-sm md:text-2xl font-mono text-muted tracking-[2px] md:tracking-[3px] text-center whitespace-nowrap">
           {line1}
         </span>
         {/* Cursor logic: Only show if typing is active or waiting */}
         {line1.length < text1.length && (
-          <span className="ml-1 w-1.5 h-4 md:w-2 md:h-5 bg-gray-400 animate-pulse inline-block"></span>
+          <span className="ml-1 w-1.5 h-4 md:w-2 md:h-5 bg-muted animate-pulse inline-block"></span>
         )}
       </div>
 
       {/* LINE 2: Added 'min-h' to reserve space for the big text */}
       <div className="min-h-[4rem] md:min-h-[8rem] flex items-center justify-center">
-        <h1 className="text-5xl sm:text-6xl md:text-9xl font-bold tracking-[1px] md:tracking-[3px] text-white select-none relative text-center whitespace-nowrap">
+        <h1 className="text-5xl sm:text-6xl md:text-9xl font-bold tracking-[1px] md:tracking-[3px] text-foreground select-none relative text-center whitespace-nowrap">
           {line2}
           {/* Big Cursor: Only shows after Line 1 is done */}
           {line1.length === text1.length && (

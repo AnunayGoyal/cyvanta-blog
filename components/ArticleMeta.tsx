@@ -17,16 +17,16 @@ export default function ArticleMeta({ content, skillLevel }: Props) {
     // Skill Badge Logic
     const getSkillColor = (level: string) => {
         switch (level?.toLowerCase() || "intermediate") {
-            case "beginner": return "text-green-400 border-green-500/30 bg-green-500/10";
-            case "advanced": return "text-red-400 border-red-500/30 bg-red-500/10";
-            default: return "text-yellow-400 border-yellow-500/30 bg-yellow-500/10";
+            case "beginner": return "text-green-600 dark:text-green-400 border-green-600/30 dark:border-green-500/30 bg-green-600/10 dark:bg-green-500/10";
+            case "advanced": return "text-red-600 dark:text-red-400 border-red-600/30 dark:border-red-500/30 bg-red-600/10 dark:bg-red-500/10";
+            default: return "text-yellow-600 dark:text-yellow-400 border-yellow-600/30 dark:border-yellow-500/30 bg-yellow-600/10 dark:bg-yellow-500/10";
         }
     };
 
     const skillColorClass = getSkillColor(safeLevel);
 
     return (
-        <div className="flex flex-wrap items-center gap-4 text-xs font-mono uppercase tracking-wider mb-8 text-gray-500">
+        <div className="flex flex-wrap items-center gap-4 text-xs font-mono uppercase tracking-wider mb-8 text-muted">
 
             {/* Reading Time */}
             <div className="flex items-center gap-2">
@@ -37,7 +37,7 @@ export default function ArticleMeta({ content, skillLevel }: Props) {
                 <span>~{minutes} MIN READ</span>
             </div>
 
-            <span className="text-gray-700">|</span>
+            <span className="text-muted/50">|</span>
 
             {/* Skill Level */}
             <div className={`px-2 py-1 rounded border ${skillColorClass} flex items-center gap-2`}>

@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: "class",
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -10,12 +11,14 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#E63E32", // Brand Red
+          DEFAULT: "#E63E32", // Brand Red - PRESERVED
           dark: "#B92B21",
           glow: "#FF6B61",
         },
-        background: "#050505",
-        surface: "#0F0F0F",
+        background: "rgb(var(--background) / <alpha-value>)",
+        surface: "rgb(var(--surface) / <alpha-value>)",
+        foreground: "rgb(var(--foreground) / <alpha-value>)",
+        muted: "rgb(var(--muted) / <alpha-value>)",
       },
       fontFamily: {
         mono: ["var(--font-mono)", "monospace"],
@@ -28,7 +31,7 @@ module.exports = {
         breathe: "breathe 10s ease-in-out infinite alternate",
         scanline: "scanline 1s linear",
         scanlineLoop: "scanline 1s linear infinite",
-        routeWipe: "routeWipe 0.6s ease-out", // NEW – page transition bar
+        routeWipe: "routeWipe 0.6s ease-out",
       },
       keyframes: {
         blink: {

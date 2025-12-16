@@ -1,11 +1,20 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useTheme } from "next-themes";
 
 export default function NetworkBackground() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const { resolvedTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (!mounted) return;
+
         const canvas = canvasRef.current;
         if (!canvas) return;
 
@@ -81,10 +90,19 @@ export default function NetworkBackground() {
         const animate = () => {
             ctx.clearRect(0, 0, width, height);
 
+            const isLight = resolvedTheme === "light";
+
             // Draw background gradient (Top-Bottom fade)
             const gradient = ctx.createLinearGradient(0, 0, 0, height);
-            gradient.addColorStop(0, "#050505");
-            gradient.addColorStop(1, "#0a0a0a");
+
+            if (isLight) {
+                gradient.addColorStop(0, "#ffffff");
+                gradient.addColorStop(1, "#f5f5f5");
+            } else {
+                gradient.addColorStop(0, "#050505");
+                gradient.addColorStop(1, "#0a0a0a");
+            }
+
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
 
@@ -116,7 +134,9 @@ export default function NetworkBackground() {
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 if (distance < MOUSE_DISTANCE) {
                     ctx.beginPath();
-                    ctx.strokeStyle = `rgba(255, 255, 255, ${1 - distance / MOUSE_DISTANCE})`;
+                    // Dark line for light mode, White line for dark mode
+                    const lineRGB = isLight ? "0, 0, 0" : "255, 255, 255";
+                    ctx.strokeStyle = `rgba(${lineRGB}, ${1 - distance / MOUSE_DISTANCE})`;
                     ctx.lineWidth = 0.8;
                     ctx.moveTo(p.x, p.y);
                     ctx.lineTo(mouse.x, mouse.y);
@@ -127,18 +147,20 @@ export default function NetworkBackground() {
             requestAnimationFrame(animate);
         };
 
-        animate();
+        const animationId = requestAnimationFrame(animate);
 
         return () => {
             window.removeEventListener("mousemove", handleMouseMove);
             window.removeEventListener("resize", handleResize);
+            cancelAnimationFrame(animationId);
         };
-    }, []);
+    }, [resolvedTheme, mounted]);
 
+    // Use normal blend for light mode to show colors, screen for dark mode
     return (
         <canvas
             ref={canvasRef}
-            className="fixed inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen"
+            className="fixed inset-0 z-0 pointer-events-none opacity-100 dark:opacity-40 transition-opacity mix-blend-normal dark:mix-blend-screen"
         />
     );
 }
