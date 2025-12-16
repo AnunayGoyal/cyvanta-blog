@@ -38,8 +38,7 @@ export default async function RootLayout({
           }}
         />
 
-        {/* 2. Tactical Grid */}
-        <div className="fixed inset-0 z-[-2] h-full w-full bg-[linear-gradient(to_right,#1a1a1a_1px,transparent_1px),linear-gradient(to_bottom,#1a1a1a_1px,transparent_1px)] bg-[size:30px_30px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+
 
         {/* 3. The Pulsing "Heartbeat" Glow */}
         <div className="fixed top-[-10%] left-[-10%] right-[-10%] h-[700px] z-[-3] bg-gradient-to-b from-primary/20 via-primary/5 to-transparent blur-3xl pointer-events-none animate-breathe" />

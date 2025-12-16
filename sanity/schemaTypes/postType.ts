@@ -86,6 +86,21 @@ export const postType = defineType({
       group: 'settings',
     }),
     defineField({
+      name: 'skillLevel',
+      title: 'Skill Level',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Beginner', value: 'beginner' },
+          { title: 'Intermediate', value: 'intermediate' },
+          { title: 'Advanced', value: 'advanced' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'intermediate',
+      group: 'settings',
+    }),
+    defineField({
       name: 'content',
       title: 'Content',
       type: 'array',

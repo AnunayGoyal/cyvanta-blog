@@ -3,12 +3,16 @@ import Link from "next/link";
 import HeroTitle from "@/components/HeroTitle";
 import { getCategories } from "@/lib/mdx";
 import { getCategoryHex } from "@/lib/tags";
+import NetworkBackground from "@/components/NetworkBackground";
+
 
 export default async function Home() {
   const categories = await getCategories();
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 pt-32 md:p-12 md:pt-36 w-full max-w-[90vw] mx-auto overflow-x-hidden">
+    <main className="flex min-h-screen flex-col items-center justify-center p-4 pt-32 md:p-12 md:pt-36 w-full max-w-[90vw] mx-auto overflow-x-hidden relative">
+      <NetworkBackground />
+
       {/* --- Top Section --- */}
       <div
         className={`

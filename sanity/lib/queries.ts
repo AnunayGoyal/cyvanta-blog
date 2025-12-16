@@ -36,7 +36,8 @@ export const POST_BY_SLUG_QUERY = defineQuery(`
     "categorySlug": category->slug.current,
     "categoryTitle": category->title,
     "tags": tags[]{ "t": coalesce(@->title, @) }.t,
-    "author": author->{name, "slug": slug.current, image, bio}
+    "skillLevel": skillLevel,
+    "author": author->{name, "slug": slug.current, image, bio, linkedin, instagram}
   }
 `);
 

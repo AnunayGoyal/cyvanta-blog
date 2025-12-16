@@ -55,7 +55,29 @@ export default function Footer() {
           </span>
 
           <span className="hidden md:inline text-gray-600">|</span>
+
           <span className="hidden md:inline hover:text-white transition-colors">© 2025</span>
+
+          <span className="hidden md:inline text-gray-600">|</span>
+
+          {/* Socials & Newsletter */}
+          <div className="flex items-center gap-6">
+            <div className="flex gap-4 border-r border-gray-800 pr-6">
+              <a href="https://linkedin.com/in/anunay-goyal" target="_blank" className="hover:text-primary transition-colors">LI</a>
+              <a href="https://instagram.com/cyvanta" target="_blank" className="hover:text-primary transition-colors">IG</a>
+            </div>
+
+            {/* Newsletter Minimal */}
+            <form className="hidden lg:flex items-center gap-2">
+              <span className="text-primary font-bold">::</span>
+              <input
+                type="email"
+                placeholder="ENTER_EMAIL"
+                className="bg-transparent border-b border-gray-700 text-xs text-white focus:border-primary focus:outline-none w-32 py-1 placeholder:text-gray-700"
+              />
+              <button className="text-primary hover:text-white transition-colors font-bold text-xs">[SUBMIT]</button>
+            </form>
+          </div>
         </div>
 
         {/* Right Side: System Stats & Controls */}

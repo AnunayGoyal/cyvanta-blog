@@ -57,6 +57,7 @@ export type PostMeta = {
   summary?: string;
   categorySlug: string;
   tags?: string[];
+  skillLevel?: string;
   categoryTitle?: string;
   categoryColor?: string;
   categoryTag?: string;

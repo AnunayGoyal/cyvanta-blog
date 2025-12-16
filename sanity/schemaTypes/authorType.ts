@@ -35,5 +35,15 @@ export const authorType = defineType({
         hotspot: true,
       },
     }),
+    defineField({
+      name: 'linkedin',
+      title: 'LinkedIn URL',
+      type: 'url',
+    }),
+    defineField({
+      name: 'instagram',
+      title: 'Instagram URL',
+      type: 'url',
+    }),
   ],
 })
