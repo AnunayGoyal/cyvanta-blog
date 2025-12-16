@@ -1,6 +1,16 @@
 # Cyvanta - Advanced Security Research Blog
 
+
 A high-performance, aesthetically driven cybersecurity blog built with Next.js 14, Tailwind CSS, and Sanity CMS.
+
+## Snapshots
+
+### Home Page
+![Home Page](./public/screenshots/home.png)
+
+### Blog Post
+![Blog Post](./public/screenshots/post.png)
+
 
 ## Key Features
 
