@@ -28,8 +28,8 @@ export default function CategoryCard({ category: cat, index }: CategoryCardProps
                 motion-safe:animate-fadeInUp
 
                 /* Light Mode / Dark Mode Base Styles */
-                bg-white border-black/10 
-                dark:bg-[#0a0a0a] dark:border-white/10
+                bg-white border-black/20 shadow-sm
+                dark:bg-[#0a0a0a] dark:border-white/10 dark:shadow-none
 
                 /* Hover State */
                 hover:-translate-y-1
@@ -53,7 +53,7 @@ export default function CategoryCard({ category: cat, index }: CategoryCardProps
                     className={`
                     text-[11px] font-bold border px-3 py-[3px] rounded-sm 
                     transition-colors tracking-[0.22em]
-                    opacity-80 group-hover:opacity-100
+                    opacity-100 group-hover:opacity-100
                   `}
                 >
                     {cat.tag}

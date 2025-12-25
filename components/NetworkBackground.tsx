@@ -160,7 +160,7 @@ export default function NetworkBackground() {
     return (
         <canvas
             ref={canvasRef}
-            className="fixed inset-0 z-0 pointer-events-none opacity-100 dark:opacity-40 transition-opacity mix-blend-normal dark:mix-blend-screen"
+            className="fixed inset-0 z-0 pointer-events-none opacity-40 dark:opacity-40 transition-opacity mix-blend-normal dark:mix-blend-screen"
         />
     );
 }

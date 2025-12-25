@@ -1,32 +1,36 @@
 # Cyvanta - Advanced Security Research Blog
 
-
-A high-performance, aesthetically driven cybersecurity blog built with Next.js 14, Tailwind CSS, and Sanity CMS.
+A high-performance, aesthetically driven cybersecurity blog built with Next.js 16, Tailwind CSS, and Sanity CMS.
 
 ## Snapshots
 
 ### Home Page
+
 ![Home Page](./public/screenshots/home.png)
 
 ### Blog Post
-![Blog Post](./public/screenshots/post.png)
 
+![Blog Post](./public/screenshots/post.png)
 
 ## Key Features
 
 ### 1. Immersive "Hacker" Aesthetic
+
 - **Design System**: Custom dark mode with "zinc" and "emerald" accents, scanline animations, and terminal-style typography.
 - **Micro-interactions**: Hover effects, glowing borders, and dynamic grid backgrounds.
 - **Responsive**: Fully optimized layouts for mobile, tablet, and desktop.
 
 ### 2. Powerful Content Management (Sanity Studio)
+
 - **Universal Live Preview**: A consistently accurate real-time preview for **Posts**, **Categories**, **Authors**, and **Tags**.
 - **Split-Pane Editing**: Edit content on the left, see the result on the right instantly.
 - **Category Card Preview**: A dedicated view to visualize exactly how categories appear in the website grid layout.
 - **Hex Color Standardization**: All tags and categories use a centralized Hex color palette, ensuring absolute visual consistency between the Studio and the Website.
 
 ### 3. Modern Tech Stack
-- **Framework**: Next.js 14 (App Router)
+
+- **Framework**: Next.js 16 (App Router)
+- **Core**: React 19
 - **CMS**: Sanity (v3) with Visual Editing support
 - **Styling**: Tailwind CSS + Framer Motion
 - **Performance**: Optimized font loading, image handling, and static generation.
@@ -38,24 +42,28 @@ This project is open-source and designed to be easily forked and customized. You
 ### Quick Start (Fork & Run)
 
 1.  **Clone the Repository**:
+
     ```bash
     git clone https://github.com/AnunayGoyal/cyvanta-blog.git
     cd cyvanta-blog
     ```
 
 2.  **Install Dependencies**:
+
     ```bash
     npm install
     ```
 
 3.  **Environment Setup**:
     Create a `.env.local` file in the root directory. You will need a Sanity project ID and dataset.
+
     ```env
     NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
     NEXT_PUBLIC_SANITY_DATASET=production
     ```
 
 4.  **Run Development Server**:
+
     ```bash
     npm run dev
     ```
@@ -66,9 +74,9 @@ This project is open-source and designed to be easily forked and customized. You
 
 ### Customization
 
--   **Colors**: Edit `tailwind.config.ts` to change the `zinc` and `emerald` color palettes.
--   **Content**: Go to `/sanity/schemaTypes` to modify the content models.
--   **Aesthetics**: Check `app/globals.css` for base styles and scanline effects.
+- **Colors**: Edit `tailwind.config.ts` to change the `zinc` and `emerald` color palettes.
+- **Content**: Go to `/sanity/schemaTypes` to modify the content models.
+- **Aesthetics**: Check `app/globals.css` for base styles and scanline effects.
 
 ---
 
@@ -83,6 +91,7 @@ The easiest way to run the application is using Docker Compose, which handles th
 ```bash
 docker-compose up --build
 ```
+
 This will start the application on port 3000.
 
 ### Manual Docker Build
@@ -90,6 +99,7 @@ This will start the application on port 3000.
 If you prefer to build the image manually:
 
 1.  **Build the Image**:
+
     ```bash
     docker build -t cyvanta-app .
     ```
@@ -101,8 +111,8 @@ If you prefer to build the image manually:
 
 ## Project Structure
 
--   `/app`: Next.js App Router pages (Website & Studio).
--   `/components`: Reusable UI components (Navbar, Footer, Hero, etc.).
--   `/lib`: Utilities (Sanity queries, color helpers, etc.).
--   `/sanity`: Schema definitions and Studio configuration.
--   `/public`: Static assets (images, fonts).
+- `/app`: Next.js App Router pages (Website & Studio).
+- `/components`: Reusable UI components (Navbar, Footer, Hero, etc.).
+- `/lib`: Utilities (Sanity queries, color helpers, etc.).
+- `/sanity`: Schema definitions and Studio configuration.
+- `/public`: Static assets (images, fonts).

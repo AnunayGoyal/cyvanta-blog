@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RouteTransition from "@/components/RouteTransition";
+import NetworkBackground from "@/components/NetworkBackground";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { draftMode } from "next/headers";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -28,7 +29,7 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en" className={jetbrainsMono.variable} suppressHydrationWarning>
-      <body className="font-mono antialiased bg-background text-foreground selection:bg-primary selection:text-white min-h-screen flex flex-col transition-colors duration-300">
+      <body className="font-mono antialiased bg-background text-foreground selection:bg-primary selection:text-white min-h-screen flex flex-col transition-colors duration-300" suppressHydrationWarning>
         <ThemeProvider>
           {/* --- BACKGROUND SYSTEM --- */}
 
@@ -39,6 +40,8 @@ export default async function RootLayout({
               backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
             }}
           />
+
+          <NetworkBackground />
 
           {/* 3. The Pulsing "Heartbeat" Glow */}
           <div className="fixed top-[-10%] left-[-10%] right-[-10%] h-[700px] z-[-3] bg-gradient-to-b from-primary/20 via-primary/5 to-transparent blur-3xl pointer-events-none animate-breathe" />

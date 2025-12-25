@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import Newsletter from "@/components/Newsletter";
 
 export default function Footer() {
+  const pathname = usePathname();
   const [shutdown, setShutdown] = useState(false);
   const [latency, setLatency] = useState(12);
 
@@ -41,7 +43,7 @@ export default function Footer() {
 
   return (
     <>
-      <Newsletter />
+      {pathname === "/" && <Newsletter />}
 
       {/* UPDATED: Contrast and padding */}
       <footer className="w-full border-t border-black/10 dark:border-white/20 bg-background py-10 mt-32 text-sm font-mono text-muted transition-colors duration-300">
