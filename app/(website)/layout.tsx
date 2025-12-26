@@ -8,6 +8,9 @@ import NetworkBackground from "@/components/NetworkBackground";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { draftMode } from "next/headers";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
+import { CommandMenu } from "@/components/CommandMenu";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -28,8 +31,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={jetbrainsMono.variable} suppressHydrationWarning>
-      <body className="font-mono antialiased bg-background text-foreground selection:bg-primary selection:text-white min-h-screen flex flex-col transition-colors duration-300" suppressHydrationWarning>
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+      <body className="font-sans antialiased bg-background text-foreground selection:bg-primary selection:text-white min-h-screen flex flex-col transition-colors duration-300" suppressHydrationWarning>
         <ThemeProvider>
           {/* --- BACKGROUND SYSTEM --- */}
 
@@ -50,7 +53,8 @@ export default async function RootLayout({
           <div className="fixed bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-primary/5 blur-[120px] rounded-full pointer-events-none opacity-20" />
 
           {/* ----------------------------- */}
-
+          
+          <CommandMenu />
           <Navbar />
 
           <RouteTransition>

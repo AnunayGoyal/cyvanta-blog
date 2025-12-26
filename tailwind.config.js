@@ -21,7 +21,8 @@ module.exports = {
         muted: "rgb(var(--muted) / <alpha-value>)",
       },
       fontFamily: {
-        mono: ["var(--font-mono)", "monospace"],
+        sans: ["var(--font-mono)"],
+        mono: ["var(--font-mono)"],
       },
       animation: {
         blink: "blink 1s step-end infinite",

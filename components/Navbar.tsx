@@ -14,13 +14,13 @@ export default function Navbar() {
           <Image
             src="/logo_cyvanta.svg"
             alt="Cyvanta Logo"
-            width={32}
-            height={32}
+            width={42}
+            height={42}
             className="object-contain"
             priority
           />
-          <span className="font-mono font-bold text-xl tracking-tight text-foreground">
-            CYVANTA<span className="text-primary">_</span>
+          <span className="font-mono font-bold text-2xl tracking-tight text-foreground">
+            CYVANTA
           </span>
         </Link>
 

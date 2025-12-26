@@ -16,6 +16,8 @@ A high-performance, aesthetically driven cybersecurity blog built with Next.js 1
 
 ### 1. Immersive "Hacker" Aesthetic
 
+- **Typography**: Global usage of [JetBrains Mono](https://www.jetbrains.com/lp/mono/) for a true developer-centric feel.
+- **Visuals**: Enhanced Navbar with a prominent, red-accented logo.
 - **Design System**: Custom dark mode with "zinc" and "emerald" accents, scanline animations, and terminal-style typography.
 - **Micro-interactions**: Hover effects, glowing borders, and dynamic grid backgrounds.
 - **Responsive**: Fully optimized layouts for mobile, tablet, and desktop.
