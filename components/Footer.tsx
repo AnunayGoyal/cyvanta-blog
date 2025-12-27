@@ -56,8 +56,7 @@ export default function Footer() {
 
             <span className="group relative cursor-default">
               <span className="group-hover:text-primary transition-colors">MADE_IN_BHARAT</span>
-              {/* Subtle Tricolor Underline on Hover */}
-              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-orange-500 via-white to-green-500 group-hover:w-full transition-all duration-500"></span>
+
             </span>
 
             <span className="hidden md:inline text-muted/50">|</span>
@@ -77,6 +76,13 @@ export default function Footer() {
 
           {/* Right Side: System Stats & Controls */}
           <div className="flex items-center gap-8 md:gap-12">
+
+            {/* QUICK LINKS (New) */}
+            <div className="hidden md:flex items-center gap-6 text-xs font-bold tracking-wider">
+               <Link href="/" className="hover:text-primary transition-colors">HOME</Link>
+               <Link href="/blog/search" className="hover:text-primary transition-colors">BLOG</Link>
+               <span className="text-muted/30">|</span>
+            </div>
 
             {/* Status Indicator */}
             <div className="flex items-center gap-3">
