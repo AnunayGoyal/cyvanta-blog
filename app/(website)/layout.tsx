@@ -4,7 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RouteTransition from "@/components/RouteTransition";
-import NetworkBackground from "@/components/NetworkBackground";
+import ProminentBackground from "@/components/ProminentBackground";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { draftMode } from "next/headers";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -44,7 +44,7 @@ export default async function RootLayout({
             }}
           />
 
-          <NetworkBackground />
+          <ProminentBackground />
 
           {/* 3. The Pulsing "Heartbeat" Glow */}
           <div className="fixed top-[-10%] left-[-10%] right-[-10%] h-[700px] z-[-3] bg-gradient-to-b from-primary/20 via-primary/5 to-transparent blur-3xl pointer-events-none animate-breathe" />
