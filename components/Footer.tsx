@@ -80,7 +80,9 @@ export default function Footer() {
             {/* QUICK LINKS (New) */}
             <div className="hidden md:flex items-center gap-6 text-xs font-bold tracking-wider">
                <Link href="/" className="hover:text-primary transition-colors">HOME</Link>
+               <Link href="/about" className="hover:text-primary transition-colors">ABOUT</Link>
                <Link href="/blog/search" className="hover:text-primary transition-colors">BLOG</Link>
+               <Link href="/privacy" className="hover:text-primary transition-colors">PRIVACY</Link>
                <span className="text-muted/30">|</span>
             </div>
 
