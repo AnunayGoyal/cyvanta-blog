@@ -1,24 +1,18 @@
 import { DocumentTextIcon } from '@sanity/icons'
 import { defineArrayMember, defineField, defineType } from 'sanity'
+import { PortableTextImporter } from '../components/PortableTextImporter'
 
 export const postType = defineType({
   name: 'post',
   title: 'Post',
   type: 'document',
   icon: DocumentTextIcon,
-  groups: [
+  // Groups removed to "make it all under one"
+  fieldsets: [
     {
-      name: 'content',
-      title: 'Content',
-      default: true,
-    },
-    {
-      name: 'settings',
-      title: 'Settings',
-    },
-    {
-      name: 'meta',
-      title: 'Metadata',
+      name: 'config',
+      title: 'Configuration',
+      options: { columns: 2 },
     },
   ],
   fields: [
@@ -27,63 +21,31 @@ export const postType = defineType({
       title: 'Title',
       type: 'string',
       validation: (Rule) => Rule.required(),
-      group: 'content',
     }),
-    defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      options: {
-        source: 'title',
-        maxLength: 96,
-      },
-      validation: (Rule) => Rule.required(),
-      group: 'meta',
-    }),
-    defineField({
-      name: 'summary',
-      title: 'Summary',
-      type: 'text',
-      rows: 3,
-      group: 'settings',
-    }),
-
-    // Date field removed; system _createdAt used instead
-
-    defineField({
-      name: 'category',
-      title: 'Category',
-      description: 'Visual theme/Card style (e.g. System, Attack)',
-      type: 'reference',
-      to: [{ type: 'category' }],
-      validation: (Rule) => Rule.required(),
-      group: 'settings',
-    }),
-    defineField({
-      name: 'mainTag',
-      title: 'Main Tag',
-      description: 'Primary topic of the blog (e.g. GRC, Cloud Security)',
-      type: 'reference',
-      to: [{ type: 'tag' }],
-      group: 'settings',
-    }),
+    // --- METADATA FIELDSET (2 Columns) ---
     defineField({
       name: 'author',
       title: 'Author',
       type: 'reference',
       to: [{ type: 'author' }],
-      group: 'settings',
+      fieldset: 'config',
     }),
     defineField({
-      name: 'tags',
-      title: 'Sub Tags',
-      description: 'Ad-hoc topics for this post (no separate document required)',
-      type: 'array',
-      of: [{ type: 'string' }],
-      options: {
-        layout: 'tags',
-      },
-      group: 'settings',
+      name: 'category',
+      title: 'Category',
+      description: 'Visual theme (e.g. System, Attack)',
+      type: 'reference',
+      to: [{ type: 'category' }],
+      validation: (Rule) => Rule.required(),
+      fieldset: 'config',
+    }),
+    defineField({
+      name: 'mainTag',
+      title: 'Main Tag',
+      description: 'Primary topic (e.g. GRC)',
+      type: 'reference',
+      to: [{ type: 'tag' }],
+      fieldset: 'config',
     }),
     defineField({
       name: 'skillLevel',
@@ -98,13 +60,23 @@ export const postType = defineType({
         layout: 'radio',
       },
       initialValue: 'intermediate',
-      group: 'settings',
+      fieldset: 'config',
+    }),
+    
+    // --- MAIN CONTENT ---
+    defineField({
+      name: 'summary',
+      title: 'Summary',
+      type: 'text',
+      rows: 3,
     }),
     defineField({
       name: 'content',
-      title: 'Content',
+      title: 'Body Content',
       type: 'array',
-      group: 'content',
+      components: {
+        input: PortableTextImporter,
+      },
       of: [
         defineArrayMember({ type: 'block' }),
         defineArrayMember({
@@ -141,6 +113,30 @@ export const postType = defineType({
         }),
         defineArrayMember({ type: 'table' }),
       ],
+    }),
+
+    // --- FORMER SETTINGS/META ---
+    defineField({
+      name: 'tags',
+      title: 'Sub Tags',
+      description: 'Ad-hoc topics for this post',
+      type: 'array',
+      // The validation error indicates these are actually stored as objects/references in the data
+      // Changing schema to match the data structure (and the preview logic)
+      of: [{ type: 'reference', to: [{ type: 'tag' }] }],
+      options: {
+        layout: 'tags',
+      },
+    }),
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
     }),
   ],
   preview: {
