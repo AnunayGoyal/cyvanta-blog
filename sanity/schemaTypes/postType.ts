@@ -1,5 +1,6 @@
 import { DocumentTextIcon } from '@sanity/icons'
 import { defineArrayMember, defineField, defineType } from 'sanity'
+import { PortableTextImporter } from '../components/PortableTextImporter'
 
 export const postType = defineType({
   name: 'post',
@@ -9,7 +10,7 @@ export const postType = defineType({
   groups: [
     {
       name: 'content',
-      title: 'Content',
+      title: 'Editor', // Renamed for clarity since it includes meta now
       default: true,
     },
     {
@@ -18,7 +19,14 @@ export const postType = defineType({
     },
     {
       name: 'meta',
-      title: 'Metadata',
+      title: 'SEO & Meta',
+    },
+  ],
+  fieldsets: [
+    {
+      name: 'config',
+      title: 'Configuration',
+      options: { columns: 2 },
     },
   ],
   fields: [
@@ -29,61 +37,33 @@ export const postType = defineType({
       validation: (Rule) => Rule.required(),
       group: 'content',
     }),
-    defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      options: {
-        source: 'title',
-        maxLength: 96,
-      },
-      validation: (Rule) => Rule.required(),
-      group: 'meta',
-    }),
-    defineField({
-      name: 'summary',
-      title: 'Summary',
-      type: 'text',
-      rows: 3,
-      group: 'settings',
-    }),
-
-    // Date field removed; system _createdAt used instead
-
-    defineField({
-      name: 'category',
-      title: 'Category',
-      description: 'Visual theme/Card style (e.g. System, Attack)',
-      type: 'reference',
-      to: [{ type: 'category' }],
-      validation: (Rule) => Rule.required(),
-      group: 'settings',
-    }),
-    defineField({
-      name: 'mainTag',
-      title: 'Main Tag',
-      description: 'Primary topic of the blog (e.g. GRC, Cloud Security)',
-      type: 'reference',
-      to: [{ type: 'tag' }],
-      group: 'settings',
-    }),
+    // --- METADATA FIELDSET (2 Columns) ---
     defineField({
       name: 'author',
       title: 'Author',
       type: 'reference',
       to: [{ type: 'author' }],
-      group: 'settings',
+      fieldset: 'config',
+      group: 'content',
     }),
     defineField({
-      name: 'tags',
-      title: 'Sub Tags',
-      description: 'Ad-hoc topics for this post (no separate document required)',
-      type: 'array',
-      of: [{ type: 'string' }],
-      options: {
-        layout: 'tags',
-      },
-      group: 'settings',
+      name: 'category',
+      title: 'Category',
+      description: 'Visual theme (e.g. System, Attack)',
+      type: 'reference',
+      to: [{ type: 'category' }],
+      validation: (Rule) => Rule.required(),
+      fieldset: 'config',
+      group: 'content',
+    }),
+    defineField({
+      name: 'mainTag',
+      title: 'Main Tag',
+      description: 'Primary topic (e.g. GRC)',
+      type: 'reference',
+      to: [{ type: 'tag' }],
+      fieldset: 'config',
+      group: 'content',
     }),
     defineField({
       name: 'skillLevel',
@@ -98,13 +78,26 @@ export const postType = defineType({
         layout: 'radio',
       },
       initialValue: 'intermediate',
-      group: 'settings',
+      fieldset: 'config',
+      group: 'content',
+    }),
+    
+    // --- MAIN CONTENT ---
+    defineField({
+      name: 'summary',
+      title: 'Summary',
+      type: 'text',
+      rows: 3,
+      group: 'content',
     }),
     defineField({
       name: 'content',
-      title: 'Content',
+      title: 'Body Content',
       type: 'array',
       group: 'content',
+      components: {
+        input: PortableTextImporter,
+      },
       of: [
         defineArrayMember({ type: 'block' }),
         defineArrayMember({
@@ -141,6 +134,30 @@ export const postType = defineType({
         }),
         defineArrayMember({ type: 'table' }),
       ],
+    }),
+
+    // --- SETTINGS / META ---
+    defineField({
+      name: 'tags',
+      title: 'Sub Tags',
+      description: 'Ad-hoc topics for this post',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: {
+        layout: 'tags',
+      },
+      group: 'settings',
+    }),
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
+      group: 'meta',
     }),
   ],
   preview: {
