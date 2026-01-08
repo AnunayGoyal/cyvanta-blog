@@ -156,6 +156,11 @@ export default function BlogExplorer({ posts }: Props) {
         </section>
       )}
 
+      {/* Divider */}
+      {recommended.length > 0 && (
+        <div className="w-full h-px bg-white/10 mb-8" />
+      )}
+
       {/* Main list */}
       <section className="space-y-3">
         {filtered.map((post) => (
