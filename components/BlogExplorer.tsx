@@ -76,8 +76,6 @@ export default function BlogExplorer({ posts }: Props) {
   const isFiltered =
     search.trim().length > 0 || category !== "all" || tag !== "all";
 
-  const recommended = !isFiltered ? posts.slice(0, 5) : [];
-
   return (
     <div className="w-full max-w-5xl mx-auto">
       {/* Controls */}
@@ -141,25 +139,6 @@ export default function BlogExplorer({ posts }: Props) {
         {filtered.length} records found
         {isFiltered && <span className="text-gray-400"> (filtered)</span>}
       </div>
-
-      {/* Recommended when no filters */}
-      {recommended.length > 0 && (
-        <section className="mb-8">
-          <h2 className="text-xs font-mono uppercase tracking-[0.25em] text-gray-400 mb-3">
-            Recommended
-          </h2>
-          <div className="space-y-3">
-            {recommended.map((post, idx) => (
-              <PostRow key={post.slug} post={post} highlightCategory />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Divider */}
-      {recommended.length > 0 && (
-        <div className="w-full h-px bg-white/10 mb-8" />
-      )}
 
       {/* Main list */}
       <section className="space-y-3">
