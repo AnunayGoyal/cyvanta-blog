@@ -59,6 +59,7 @@ export default async function Home() {
             View GitHub
           </a>
         </div>
+
       </div>
 
       {/* --- Category Cards Grid (Pushed Below Fold) --- */}

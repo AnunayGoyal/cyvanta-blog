@@ -43,7 +43,7 @@ export default function Footer() {
 
   return (
     <>
-      {pathname === "/" && <Newsletter />}
+      {/* {pathname === "/" && <Newsletter />} */}
 
       {/* UPDATED: Contrast and padding */}
       <footer className="w-full border-t border-black/10 dark:border-white/20 bg-background py-10 mt-32 text-sm font-mono text-muted transition-colors duration-300">
@@ -81,6 +81,7 @@ export default function Footer() {
             <div className="hidden md:flex items-center gap-6 text-xs font-bold tracking-wider">
                <Link href="/" className="hover:text-primary transition-colors">HOME</Link>
                <Link href="/about" className="hover:text-primary transition-colors">ABOUT</Link>
+               <Link href="/team" className="hover:text-primary transition-colors">TEAM</Link>
                <Link href="/blog/search" className="hover:text-primary transition-colors">BLOG</Link>
                <Link href="/privacy" className="hover:text-primary transition-colors">PRIVACY</Link>
                <span className="text-muted/30">|</span>
