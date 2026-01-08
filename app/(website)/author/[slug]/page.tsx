@@ -146,7 +146,7 @@ export default async function AuthorProfilePage({ params }: { params: Promise<{ 
                   const dateString = post.date ? new Date(post.date).toLocaleDateString() : "Unknown Date";
 
                   return (
-                  <Link key={post.slug} href={`/blog/${post.categorySlug || 'general'}/${post.slug}`} className="group relative block p-6 border border-border/50 rounded-lg bg-card/20 hover:bg-card/40 transition-all hover:border-emerald-500/50">
+                  <Link key={post.slug} href={`/blog/${post.slug}`} className="group relative block p-6 border border-border/50 rounded-lg bg-card/20 hover:bg-card/40 transition-all hover:border-emerald-500/50">
                       <div className="space-y-3">
                           <div className="flex items-center justify-between text-xs text-muted-foreground">
                               <span>{dateString}</span>
@@ -161,7 +161,7 @@ export default async function AuthorProfilePage({ params }: { params: Promise<{ 
                               </p>
                           )}
                           <div className="pt-2 flex flex-wrap gap-2">
-                              {post.tags?.map(t => (
+                              {post.tags?.filter(t => typeof t === 'string').map(t => (
                                   <span key={t} className="text-[10px] px-2 py-0.5 bg-muted rounded-full">#{t}</span>
                               ))}
                           </div>
