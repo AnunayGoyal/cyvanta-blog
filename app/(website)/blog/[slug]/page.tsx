@@ -63,9 +63,9 @@ const ptComponents = {
   },
   block: {
     blockquote: ({ children }: any) => <KeyTakeaway>{children}</KeyTakeaway>,
-    normal: ({ children }: any) => <p className="mb-4 leading-relaxed text-gray-300">{children}</p>,
-    h2: ({ children, value }: any) => <h2 id={`section-${value._key}`} className="text-2xl font-bold mt-12 mb-6 text-white scroll-mt-24">{children}</h2>,
-    h3: ({ children, value }: any) => <h3 id={`section-${value._key}`} className="text-xl font-bold mt-8 mb-4 text-white scroll-mt-24">{children}</h3>,
+    normal: ({ children }: any) => <p className="mb-4 leading-relaxed text-foreground/80">{children}</p>,
+    h2: ({ children, value }: any) => <h2 id={`section-${value._key}`} className="text-2xl font-bold mt-12 mb-6 text-foreground scroll-mt-24">{children}</h2>,
+    h3: ({ children, value }: any) => <h3 id={`section-${value._key}`} className="text-xl font-bold mt-8 mb-4 text-foreground scroll-mt-24">{children}</h3>,
   }
 };
 
@@ -86,14 +86,14 @@ export default async function BlogPost({ params }: Props) {
   const { title, date, tags, content, author, skillLevel } = post;
 
   return (
-    <div className="min-h-screen bg-black text-gray-300 font-mono selection:bg-primary selection:text-black pb-24 relative">
+    <div className="min-h-screen bg-background text-foreground font-mono selection:bg-primary selection:text-black pb-24 relative">
       <ReadingProgress />
       <SecurityDashboard />
       <BookmarkManager currentPost={{ slug, title }} />
 
       {/* Background Grid */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(#333_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-50"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#333_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-50"></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 pt-32 md:pt-40 flex gap-12">
@@ -112,7 +112,7 @@ export default async function BlogPost({ params }: Props) {
             BACK TO INTEL
           </Link>
 
-          <header className="mb-12 border-b border-white/10 pb-8">
+          <header className="mb-12 border-b border-border pb-8">
             <div className="flex gap-3 mb-6">
               {tags && tags.map((tag: string) => {
                 const props = getTagProps(tag, null);
@@ -128,7 +128,7 @@ export default async function BlogPost({ params }: Props) {
               })}
             </div>
 
-            <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight mb-4 leading-tight">
+            <h1 className="text-3xl md:text-5xl font-bold text-foreground tracking-tight mb-4 leading-tight">
               {title}
             </h1>
 
@@ -143,7 +143,7 @@ export default async function BlogPost({ params }: Props) {
           </header>
 
           {/* Article Content */}
-          <article className="prose prose-invert prose-headings:text-white prose-a:text-primary prose-code:text-primary prose-pre:bg-[#0a0a0a] prose-pre:border prose-pre:border-white/10 max-w-none">
+          <article className="prose dark:prose-invert prose-headings:text-foreground prose-a:text-primary prose-code:text-primary prose-pre:bg-muted/50 prose-pre:border prose-pre:border-border max-w-none">
             <PortableText value={content} components={ptComponents} />
           </article>
 
