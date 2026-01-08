@@ -7,21 +7,7 @@ export const postType = defineType({
   title: 'Post',
   type: 'document',
   icon: DocumentTextIcon,
-  groups: [
-    {
-      name: 'content',
-      title: 'Editor', // Renamed for clarity since it includes meta now
-      default: true,
-    },
-    {
-      name: 'settings',
-      title: 'Settings',
-    },
-    {
-      name: 'meta',
-      title: 'SEO & Meta',
-    },
-  ],
+  // Groups removed to "make it all under one"
   fieldsets: [
     {
       name: 'config',
@@ -35,7 +21,6 @@ export const postType = defineType({
       title: 'Title',
       type: 'string',
       validation: (Rule) => Rule.required(),
-      group: 'content',
     }),
     // --- METADATA FIELDSET (2 Columns) ---
     defineField({
@@ -44,7 +29,6 @@ export const postType = defineType({
       type: 'reference',
       to: [{ type: 'author' }],
       fieldset: 'config',
-      group: 'content',
     }),
     defineField({
       name: 'category',
@@ -54,7 +38,6 @@ export const postType = defineType({
       to: [{ type: 'category' }],
       validation: (Rule) => Rule.required(),
       fieldset: 'config',
-      group: 'content',
     }),
     defineField({
       name: 'mainTag',
@@ -63,7 +46,6 @@ export const postType = defineType({
       type: 'reference',
       to: [{ type: 'tag' }],
       fieldset: 'config',
-      group: 'content',
     }),
     defineField({
       name: 'skillLevel',
@@ -79,7 +61,6 @@ export const postType = defineType({
       },
       initialValue: 'intermediate',
       fieldset: 'config',
-      group: 'content',
     }),
     
     // --- MAIN CONTENT ---
@@ -88,13 +69,11 @@ export const postType = defineType({
       title: 'Summary',
       type: 'text',
       rows: 3,
-      group: 'content',
     }),
     defineField({
       name: 'content',
       title: 'Body Content',
       type: 'array',
-      group: 'content',
       components: {
         input: PortableTextImporter,
       },
@@ -136,7 +115,7 @@ export const postType = defineType({
       ],
     }),
 
-    // --- SETTINGS / META ---
+    // --- FORMER SETTINGS/META ---
     defineField({
       name: 'tags',
       title: 'Sub Tags',
@@ -146,7 +125,6 @@ export const postType = defineType({
       options: {
         layout: 'tags',
       },
-      group: 'settings',
     }),
     defineField({
       name: 'slug',
@@ -157,7 +135,6 @@ export const postType = defineType({
         maxLength: 96,
       },
       validation: (Rule) => Rule.required(),
-      group: 'meta',
     }),
   ],
   preview: {

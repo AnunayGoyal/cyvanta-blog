@@ -80,9 +80,13 @@ export const PortableTextImporter = (props: any) => {
         onChange={handleFileChange}
       />
 
-      {/* Header / Actions */}
-      <Flex justify="space-between" align="center">
-          <Text size={1} weight="semibold">Body Content</Text>
+      {/* Header / Actions - Button aligned right, Label handled by default or we hide it and show our own? 
+          Actually, simple fix: Just show button right aligned. The field label is rendered by renderDefault inside properties usually?
+          No, renderDefault(props) renders the whole form field including label.
+          If we want to fix "double heading" (User saw "Body Content" twice), it's because I added <Text>Body Content</Text> AND renderDefault showed it.
+          So, remove <Text>.
+      */}
+      <Flex justify="flex-end" align="center" style={{ marginBottom: '-30px', position: 'relative', zIndex: 10 }}>
           <Button
             fontSize={1}
             icon={UploadIcon}
@@ -93,10 +97,9 @@ export const PortableTextImporter = (props: any) => {
           />
       </Flex>
 
-      {/* Default Portable Text Editor */}
-      <Card border padding={0}>
-          {props.renderDefault({ ...props, title: '' })} 
-          {/* We hide the default title here since we rendered our own header above to include the button */}
+      {/* Default Portable Text Editor - increased height */}
+      <Card border padding={0} style={{ minHeight: '500px' }}>
+          {props.renderDefault(props)} 
       </Card>
     </Stack>
   )
