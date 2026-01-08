@@ -18,7 +18,6 @@ import ArticleMeta from "@/components/ArticleMeta";
 import BookmarkManager from "@/components/BookmarkManager";
 import FeedbackWidget from "@/components/FeedbackWidget";
 import KeyTakeaway from "@/components/KeyTakeaway";
-import SecurityDashboard from "@/components/SecurityDashboard";
 
 const ptComponents = {
   types: {
@@ -88,7 +87,6 @@ export default async function BlogPost({ params }: Props) {
   return (
     <div className="min-h-screen bg-background text-foreground font-mono selection:bg-primary selection:text-black pb-24 relative">
       <ReadingProgress />
-      <SecurityDashboard />
       <BookmarkManager currentPost={{ slug, title }} />
 
       {/* Background Grid */}
