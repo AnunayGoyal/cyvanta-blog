@@ -1,28 +1,30 @@
-import { Card, Heading, Text, Stack, Box, Spinner, Flex } from '@sanity/ui'
+import { Card, Heading, Text, Stack, Box, Spinner, Button } from '@sanity/ui'
 import { PortableText } from '@portabletext/react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { atomDark, prism } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useClient } from 'sanity'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { urlFor } from '../lib/image'
+import { MoonIcon, SunIcon } from '@sanity/icons'
 
-const CodeBlock = ({ value }: any) => {
+// --- HELPER COMPONENTS ---
+
+const CodeBlock = ({ value, darkMode }: any) => {
     if (!value || !value.code) return null;
     return (
-        <div style={{ margin: '2rem 0', borderRadius: '0.5rem', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', background: '#0D0D0D' }}>
-            {/* Terminal Header */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.5rem 1rem', background: 'rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ margin: '2rem 0', borderRadius: '0.5rem', overflow: 'hidden', border: darkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)', background: darkMode ? '#0D0D0D' : '#F9FAFB' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.5rem 1rem', background: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)', borderBottom: darkMode ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(0,0,0,0.05)' }}>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <div style={{ width: '0.75rem', height: '0.75rem', borderRadius: '50%', background: 'rgba(239, 68, 68, 0.2)', border: '1px solid rgba(239, 68, 68, 0.5)' }}></div>
                     <div style={{ width: '0.75rem', height: '0.75rem', borderRadius: '50%', background: 'rgba(234, 179, 8, 0.2)', border: '1px solid rgba(234, 179, 8, 0.5)' }}></div>
                     <div style={{ width: '0.75rem', height: '0.75rem', borderRadius: '50%', background: 'rgba(34, 197, 94, 0.2)', border: '1px solid rgba(34, 197, 94, 0.5)' }}></div>
                 </div>
-                <span style={{ fontSize: '0.75rem', color: '#9ca3af', fontFamily: 'monospace' }}>{value.filename || 'Code'}</span>
-                <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#4b5563', textTransform: 'uppercase' }}>{value.language}</span>
+                <span style={{ fontSize: '0.75rem', color: darkMode ? '#9ca3af' : '#6b7280', fontFamily: 'monospace' }}>{value.filename || 'Code'}</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: darkMode ? '#4b5563' : '#9ca3af', textTransform: 'uppercase' }}>{value.language}</span>
             </div>
-            {/* Syntax Highlighter */}
             <SyntaxHighlighter
                 language={value.language || 'text'}
-                style={atomDark}
+                style={darkMode ? atomDark : prism}
                 customStyle={{ background: 'transparent', margin: 0, padding: '1.5rem', fontSize: '0.875rem' }}
             >
                 {value.code}
@@ -31,6 +33,131 @@ const CodeBlock = ({ value }: any) => {
     )
 }
 
+// Simplified Particle Background to match ProminentBackground.tsx
+const ParticleBackground = ({ darkMode }: { darkMode: boolean }) => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => { setMounted(true); }, []);
+
+    useEffect(() => {
+        if (!mounted) return;
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        let width = (canvas.width = window.innerWidth);
+        let height = (canvas.height = window.innerHeight);
+
+        const GAP = 25; 
+        const RADIUS = 150; 
+        const FORCE_FACTOR = 0.8; 
+        const RETURN_SPEED = 0.1; 
+        const DAMPING = 0.9; 
+
+        class Particle {
+            x: number; y: number; ox: number; oy: number; vx: number; vy: number; color: string;
+            constructor(x: number, y: number) {
+                this.x = x; this.y = y; this.ox = x; this.oy = y;
+                this.vx = 0; this.vy = 0;
+                // Using website brand colors (Primary Red or White)
+                // In website it uses var(--primary) (#E63E32) and var(--foreground)
+                this.color = Math.random() > 0.5 ? "#E63E32" : (darkMode ? "#FFFFFF" : "#000000"); 
+            }
+            update(mouse: { x: number; y: number }) {
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < RADIUS) {
+                    const angle = Math.atan2(dy, dx);
+                    const force = (RADIUS - distance) / RADIUS; 
+                    const push = force * FORCE_FACTOR;
+                    this.vx -= Math.cos(angle) * push;
+                    this.vy -= Math.sin(angle) * push;
+                }
+                const homeDx = this.ox - this.x;
+                const homeDy = this.oy - this.y;
+                this.vx += homeDx * RETURN_SPEED;
+                this.vy += homeDy * RETURN_SPEED;
+                this.vx *= DAMPING;
+                this.vy *= DAMPING;
+                this.x += this.vx;
+                this.y += this.vy;
+            }
+            draw() {
+                if (!ctx) return;
+                const vel = Math.sqrt(this.vx*this.vx + this.vy*this.vy);
+                const size = Math.min(1.5 + vel * 0.5, 3); 
+                let alpha = 0.3;
+                if (vel > 0.5) alpha = 0.8; 
+                
+                // Coloring logic
+                ctx.fillStyle = darkMode ? `rgba(150, 150, 150, ${alpha})` : `rgba(50, 50, 50, ${alpha})`;
+                if (vel > 1) ctx.fillStyle = `rgba(230, 62, 50, ${alpha})`; // Red tint when fast
+
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        let particles: Particle[] = [];
+        const initParticles = () => {
+             particles = [];
+             for (let x = 0; x < width; x += GAP) {
+                 for (let y = 0; y < height; y += GAP) {
+                     particles.push(new Particle(x, y));
+                 }
+             }
+        };
+
+        let mouse = { x: -1000, y: -1000 };
+        const handleMouseMove = (e: MouseEvent) => {
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+        };
+        const handleMouseLeave = () => { mouse.x = -1000; mouse.y = -1000; }
+        
+        // Use canvas specific events since we are inside an iframe/container
+        // Or stick to window if fullscreen. Studio preview is usually a container.
+        // We'll attach to window for now to be safe, but filter by bounds if needed.
+        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("mouseleave", handleMouseLeave);
+        const handleResize = () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initParticles();
+        };
+        window.addEventListener("resize", handleResize);
+
+        initParticles();
+        let animationId: number;
+        const animate = () => {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => { p.update(mouse); p.draw(); });
+            animationId = requestAnimationFrame(animate);
+        };
+        animate();
+
+        return () => {
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("mouseleave", handleMouseLeave);
+            window.removeEventListener("resize", handleResize);
+            cancelAnimationFrame(animationId);
+        };
+    }, [mounted, darkMode]); // Re-run if darkMode changes to update colors
+
+    return (
+        <canvas
+            ref={canvasRef}
+            style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', opacity: 0.6 }}
+        />
+    );
+};
+
+
 export default function StudioPreview({ document, options }: { document: { displayed: any }, options?: { type?: string, mode?: 'card' | 'normal' } }) {
     const doc = document.displayed
     const client = useClient({ apiVersion: '2024-01-01' })
@@ -38,35 +165,27 @@ export default function StudioPreview({ document, options }: { document: { displ
     const [categoryData, setCategoryData] = useState<any>(null)
     const [tagsData, setTagsData] = useState<any[]>([])
     const [loading, setLoading] = useState(false)
+    
+    // THEME STATE
+    const [darkMode, setDarkMode] = useState(true);
 
     useEffect(() => {
         const fetchIds = async () => {
-            // Only fetch if we have references
             const catRef = doc.category?._ref
             const tagRefs = doc.tags?.map((t: any) => t._ref).filter(Boolean) || []
 
             if (!catRef && tagRefs.length === 0) {
-                setCategoryData(null)
-                setTagsData([])
-                return
+                setCategoryData(null); setTagsData([]); return
             }
-
             setLoading(true)
             try {
-                // Fetch Category
                 if (catRef) {
                     const cat = await client.fetch(`*[_id == $id][0]{title, tag, color, subtitle}`, { id: catRef })
                     setCategoryData(cat)
-                } else {
-                    setCategoryData(null)
                 }
-
-                // Fetch Tags
                 if (tagRefs.length > 0) {
                     const tags = await client.fetch(`*[_id in $ids]{title, color, slug}`, { ids: tagRefs })
                     setTagsData(tags)
-                } else {
-                    setTagsData([])
                 }
             } catch (err) {
                 console.error("Error fetching preview data", err)
@@ -74,139 +193,161 @@ export default function StudioPreview({ document, options }: { document: { displ
                 setLoading(false)
             }
         }
-
         fetchIds()
     }, [doc.category, doc.tags, client])
 
-
     const resolveColor = (colorStr: string) => {
         if (!colorStr) return null
-
-        // Hex
         if (/^#[0-9A-F]{6}$/i.test(colorStr) || /^#[0-9A-F]{3}$/i.test(colorStr)) return colorStr
-
-        // Common Tailwind/CSS Names
-        const colors: Record<string, string> = {
-            emerald: '#34d399',
-            green: '#4ade80',
-            blue: '#60a5fa',
-            red: '#ef4444',
-            yellow: '#facc15',
-            amber: '#fbbf24',
-            orange: '#fb923c',
-            purple: '#c084fc',
-            indigo: '#818cf8',
-            pink: '#f472b6',
-            rose: '#fb7185',
-            teal: '#2dd4bf',
-            cyan: '#22d3ee',
-            sky: '#38bdf8',
-            lime: '#a3e635',
-            violet: '#a78bfa',
-            fuchsia: '#e879f9',
-            slate: '#94a3b8',
-            gray: '#9ca3af',
-            zinc: '#a1a1aa',
-            neutral: '#a3a3a3',
-            stone: '#a8a29e',
-            black: '#000000',
-            white: '#ffffff'
-        }
-
+        const colors: Record<string, string> = { emerald: '#34d399', green: '#4ade80', blue: '#60a5fa', red: '#ef4444', yellow: '#facc15', amber: '#fbbf24', orange: '#fb923c', purple: '#c084fc', indigo: '#818cf8', pink: '#f472b6', rose: '#fb7185', teal: '#2dd4bf', cyan: '#22d3ee', sky: '#38bdf8', lime: '#a3e635', violet: '#a78bfa', fuchsia: '#e879f9', slate: '#94a3b8', gray: '#9ca3af', zinc: '#a1a1aa', neutral: '#a3a3a3', stone: '#a8a29e', black: '#000000', white: '#ffffff' }
         return colors[colorStr.toLowerCase()] || colorStr
     }
 
-    // --- RENDER HELPERS ---
+    // --- RENDER ---
+    
+    // Inject Custom Animations
+    const customStyles = `
+        @keyframes breathe {
+          0%, 100% { opacity: 0.2; transform: scale(1); }
+          50% { opacity: 0.5; transform: scale(1.1); }
+        }
+        .animate-breathe {
+          animation: breathe 8s ease-in-out infinite;
+        }
+    `
+    // Background Elements Wrapper
+    const BackgroundSystem = () => (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', background: darkMode ? '#050505' : '#ffffff', overflow: 'hidden', transition: 'background 0.3s' }}>
+             <style>{customStyles}</style>
+             
+             {/* 1. Base Noise Texture */}
+             <div style={{
+                 position: 'absolute', inset: 0, opacity: 0.04, mixBlendMode: 'overlay',
+                 backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
+             }} />
+             
+             {/* 2. Particles */}
+             <ParticleBackground darkMode={darkMode} />
 
-    // Generic field mapping
-    const title = doc.title || doc.name || 'Untitled'
-    // Prioritize specific fields
-    const summary = doc.summary || doc.description || doc.bio || doc.subtitle
-    const content = doc.content
+             {/* 3. Pulsing Glow (Top) - Primary color #E63E32 with alpha */}
+             <div className="animate-breathe" style={{
+                 position: 'absolute', top: '-10%', left: '-10%', right: '-10%', height: '700px',
+                 background: 'linear-gradient(to bottom, rgba(230, 62, 50, 0.2), rgba(230, 62, 50, 0.05), transparent)',
+                 filter: 'blur(60px)',
+                 transformOrigin: 'top center'
+             }} />
 
-    // Category Badge Data
-    const displayTag = categoryData?.tag || doc.tag || 'TAG'
-    const displayTagColorRaw = categoryData?.color || doc.color
-    const displayTagColor = resolveColor(displayTagColorRaw) || '#fff'
+             {/* 4. Secondary Glow (Bottom Right) */}
+             <div style={{
+                 position: 'absolute', bottom: '-20%', right: '-10%', width: '600px', height: '600px',
+                 background: 'rgba(230, 62, 50, 0.05)',
+                 filter: 'blur(120px)',
+                 borderRadius: '50%',
+                 opacity: 0.2
+             }} />
+        </div>
+    )
+    
+    const toggleButton = (
+        <Box style={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 100 }}>
+             <Button 
+                onClick={() => setDarkMode(!darkMode)}
+                icon={darkMode ? SunIcon : MoonIcon}
+                mode="ghost"
+                tone="default"
+                style={{ background: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', color: darkMode ? '#fff' : '#000', borderRadius: '50%', padding: '0.8rem' }}
+             />
+        </Box>
+    );
 
-    // CARD MODE (Simplified for referencing same data)
-    if (options?.mode === 'card') {
-        const bgStyle = {
-            background: '#050505',
-            color: '#fff',
-            backgroundImage: `
-                radial-gradient(circle at 50% 0%, #1a1a1a 0%, transparent 70%),
-                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
-            `,
-            backgroundSize: '100% 100%, 20px 20px, 20px 20px',
-            backgroundPosition: 'top center, 0 0, 0 0',
+    const themeColors = {
+        bg: darkMode ? 'transparent' : 'transparent',
+        text: darkMode ? '#fff' : '#18181b', // zinc-900
+        muted: darkMode ? '#a1a1aa' : '#52525b', // zinc-600
+        border: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+        subBorder: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)', // Used for dividers
+        cardBg: darkMode ? 'transparent' : 'transparent',
+    }
+
+    // AUTHOR PREVIEW
+    if (options?.type === 'author') {
+        let imageUrl = null;
+        const source = doc.avatarSource || 'upload'; 
+        if (source === 'upload') {
+            try { if (doc.image) imageUrl = urlFor(doc.image).width(600).height(600).url() } catch (error) { console.warn("Failed to generate image URL:", error) }
+        }
+        if (source === 'preset' && doc.staticImage) { imageUrl = `/avatars/${doc.staticImage}` }
+        // Fallbacks
+        if (!imageUrl) {
+            if (doc.image && !doc.avatarSource) try { imageUrl = urlFor(doc.image).width(600).height(600).url() } catch(e){}
+            else if (doc.staticImage && !doc.avatarSource) imageUrl = `/avatars/${doc.staticImage}`
         }
 
-        return (
-            <Card padding={4} height="fill" tone="transparent" style={{ ...bgStyle, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{
-                    width: '100%',
-                    maxWidth: '350px',
-                    height: '280px',
-                    background: '#0a0a0a',
-                    border: `1px solid rgba(255,255,255,0.1)`,
-                    borderRadius: '2px',
-                    padding: '1.25rem',
-                    position: 'relative',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    overflow: 'hidden',
-                    boxShadow: '0 20px 40px -10px rgba(0,0,0,0.5)'
-                }}>
-                    {/* Top Section */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'auto' }}>
-                        <span style={{
-                            color: displayTagColor,
-                            borderColor: displayTagColor,
-                            borderWidth: '1px',
-                            borderStyle: 'solid',
-                            fontSize: '11px',
-                            fontWeight: 'bold',
-                            padding: '3px 12px',
-                            borderRadius: '2px',
-                            letterSpacing: '0.22em',
-                            textTransform: 'uppercase',
-                            opacity: loading ? 0.5 : 1
-                        }}>
-                            {displayTag}
-                        </span>
-                        <span style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                            {categoryData?.subtitle || doc.subtitle}
-                        </span>
-                    </div>
+        const displayName = (doc.firstName && doc.lastName) ? `${doc.firstName} ${doc.lastName}` : (doc.name || 'Author Name')
 
-                    {/* Bottom Section */}
-                    <div style={{ marginTop: 'auto', position: 'relative', zIndex: 10 }}>
-                        <h2 style={{
-                            fontSize: '1.25rem',
-                            fontWeight: '700',
-                            lineHeight: '1.2',
-                            marginBottom: '0.75rem',
-                            color: '#fff',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden'
-                        }}>
-                            {title} →
-                        </h2>
-                        <p style={{
-                            fontSize: '0.875rem',
-                            color: '#9ca3af',
-                            lineHeight: '1.6',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 3,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden'
-                        }}>
-                            {summary}
-                        </p>
+        return (
+            <Card padding={0} height="fill" tone="transparent" style={{ position: 'relative', background: 'transparent', color: themeColors.text, overflow: 'hidden', fontFamily: 'monospace' }}>
+                <BackgroundSystem />
+                {toggleButton}
+                
+                <div style={{ 
+                    height: '100%', overflowY: 'auto', padding: '8rem 1rem 5rem 1rem', position: 'relative', width: '100%', zIndex: 10
+                }}>
+                    <div style={{ maxWidth: '56rem', margin: '0 auto' }}> 
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3rem', marginBottom: '4rem' }}>
+                             {/* Flex Row Default for Desktop-like view */}
+                             <div style={{ display: 'flex', alignItems: 'center', gap: '3rem', width: '100%', flexDirection: 'row' }}>
+                                 
+                                 {/* Text Content */}
+                                 <div style={{ flex: 1, textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                     <h1 style={{ fontSize: '3rem', fontWeight: 700, letterSpacing: '-0.05em', color: themeColors.text, margin: 0, lineHeight: 1 }}>
+                                        {displayName}
+                                     </h1>
+                                     <p style={{ fontSize: '0.875rem', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 700, margin: 0 }}>
+                                        [ {doc.profileTag || 'Core Contributor'} ]
+                                     </p>
+                                     {doc.bio && <p style={{ color: themeColors.muted, maxWidth: '36rem', lineHeight: 1.625, margin: 0 }}>{doc.bio}</p>}
+                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', paddingTop: '0.5rem' }}>
+                                          {['website', 'github', 'twitter', 'linkedin', 'instagram'].map(platform => {
+                                              if (!doc[platform]) return null;
+                                              return (
+                                                  <div key={platform} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '2.5rem', width: '2.5rem', borderRadius: '9999px', border: `1px solid ${darkMode ? '#3f3f46' : '#d4d4d8'}`, color: themeColors.muted, cursor: 'pointer' }}>
+                                                      {platform === 'website' && <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>}
+                                                      {platform === 'github' && <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>}
+                                                      {platform === 'twitter' && <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>}
+                                                      {platform === 'linkedin' && <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>}
+                                                      {platform === 'instagram' && <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>}
+                                                  </div>
+                                              )
+                                          })}
+                                     </div>
+                                 </div>
+
+                                 {/* Image Container: Swapped to Right, Border Reduced to 2px */}
+                                 <div style={{ 
+                                     position: 'relative', height: '16rem', width: '16rem', flexShrink: 0, overflow: 'hidden', borderRadius: '9999px',
+                                     border: `2px solid ${darkMode ? 'rgba(16, 185, 129, 0.2)' : 'rgba(16, 185, 129, 0.4)'}`,
+                                     boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',  background: '#000',
+                                     display: 'flex', alignItems: 'center', justifyContent: 'center' 
+                                 }}>
+                                     {imageUrl ? (
+                                         <img src={imageUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Profile" />
+                                     ) : (
+                                         <div style={{ display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', background: '#27272a', color: '#71717a', fontSize: '3.75rem', userSelect: 'none' }}>?</div>
+                                     )}
+                                 </div>
+
+                             </div>
+                        </div>
+                        <div style={{ width: '100%', height: '1px', background: themeColors.border, marginBottom: '3rem' }}></div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem' }}>
+                            <span style={{ color: '#10b981' }}>&gt;</span>
+                            <span style={{ fontWeight: 700, fontSize: '1.5rem', letterSpacing: '-0.025em', color: themeColors.text }}>AUTHORED_LOGS</span>
+                            <span style={{ color: themeColors.muted, fontSize: '0.875rem' }}>(0)</span>
+                        </div>
+                        <div style={{ padding: '3rem', textAlign: 'center', color: themeColors.muted, border: themeColors.border, borderRadius: '0.5rem', background: darkMode ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.02)' }}>
+                            No logs found for this operative yet.
+                        </div>
                     </div>
                 </div>
             </Card>
@@ -215,126 +356,45 @@ export default function StudioPreview({ document, options }: { document: { displ
 
     // NORMAL MODE
     return (
-        <Card padding={4} height="fill" overflow="auto" tone="transparent" style={{
-            background: '#050505',
-            color: '#fff',
-            backgroundImage: `
-                radial-gradient(circle at 50% 0%, #1a1a1a 0%, transparent 70%),
-                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
-            `,
-            backgroundSize: '100% 100%, 20px 20px, 20px 20px',
-            backgroundPosition: 'top center, 0 0, 0 0'
-        }}>
-            <Box padding={[3, 4, 5]}>
+        <Card padding={4} height="fill" overflow="auto" tone="transparent" style={{ background: themeColors.bg, color: themeColors.text, position: 'relative' }}>
+             <BackgroundSystem />
+             {toggleButton}
+            <Box padding={[3, 4, 5]} style={{ position: 'relative', zIndex: 10 }}>
                 <Stack space={5} style={{ maxWidth: '42rem', margin: '0 auto' }}>
-
-                    {/* Header Section */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             {/* Category Badge */}
-                            {(displayTag || categoryData?.subtitle) && (
+                            {(doc.tag || categoryData?.tag) && (
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                     <span style={{
-                                        color: displayTagColor,
-                                        borderColor: displayTagColor,
-                                        borderWidth: '1px',
-                                        borderStyle: 'solid',
-                                        fontSize: '11px',
-                                        fontWeight: 'bold',
-                                        padding: '3px 12px',
-                                        borderRadius: '2px',
-                                        letterSpacing: '0.22em',
-                                        textTransform: 'uppercase'
+                                        color: resolveColor(categoryData?.color || doc.color) || themeColors.text, borderWidth: '1px', borderStyle: 'solid',
+                                        fontSize: '11px', fontWeight: 'bold', padding: '3px 12px', borderRadius: '2px', letterSpacing: '0.22em', textTransform: 'uppercase'
                                     }}>
-                                        {displayTag}
+                                        {doc.tag || categoryData?.tag}
                                     </span>
-                                    {categoryData?.subtitle && (
-                                        <span style={{ fontSize: '11px', color: '#52525b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                            {categoryData.subtitle}
-                                        </span>
-                                    )}
+                                    {categoryData?.subtitle && <span style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{categoryData.subtitle}</span>}
                                 </div>
                             )}
-
                             {loading && <Spinner size={1} muted />}
                         </div>
-
-                        <Heading size={5} style={{ fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.1 }}>
-                            {title}
-                        </Heading>
-
-                        {/* Tags Info */}
+                        <Heading size={5} style={{ fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.1, color: themeColors.text }}>{doc.title || doc.name}</Heading>
                         {tagsData.length > 0 && (
                             <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                                {tagsData.map((tag: any, i: number) => {
-                                    const c = resolveColor(tag.color)
-                                    return (
-                                        <div key={i} style={{
-                                            display: 'flex', alignItems: 'center',
-                                            border: '1px solid rgba(255,255,255,0.1)',
-                                            borderRadius: '4px',
-                                            padding: '2px 8px',
-                                            background: 'rgba(255,255,255,0.03)'
-                                        }}>
-                                            <span style={{
-                                                width: '6px', height: '6px', borderRadius: '50%',
-                                                background: c || '#fff', marginRight: '6px'
-                                            }} />
-                                            <span style={{ fontSize: '12px', color: '#d4d4d8', fontFamily: 'monospace' }}>
-                                                {tag.title}
-                                            </span>
-                                        </div>
-                                    )
-                                })}
+                                {tagsData.map((tag: any, i: number) => (
+                                    <div key={i} style={{ display: 'flex', alignItems: 'center', border: themeColors.border, borderRadius: '4px', padding: '2px 8px', background: darkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)' }}>
+                                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: resolveColor(tag.color) || '#fff', marginRight: '6px' }} />
+                                        <span style={{ fontSize: '12px', color: themeColors.muted, fontFamily: 'monospace' }}>{tag.title}</span>
+                                    </div>
+                                ))}
                             </div>
                         )}
-
-                        {/* Fallback if no tags but we have extra details like explicit fields on the doc */}
-                        {!tagsData.length && doc.slug?.current && (
-                            <Text size={1} muted style={{ fontFamily: 'monospace', opacity: 0.5 }}>
-                                /{doc.slug.current}
-                            </Text>
-                        )}
-
                     </div>
-
-                    {summary && (
-                        <Text size={3} style={{ color: '#a1a1aa', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
-                            {summary}
-                        </Text>
-                    )}
-
-                    {/* Divider */}
-                    <div style={{ height: '1px', background: 'linear-gradient(to right, rgba(255,255,255,0.1), transparent)' }}></div>
-
-                    {/* Content */}
-                    <div style={{ fontSize: '1.125rem', lineHeight: 1.75, color: '#e4e4e7' }}>
-                        {content ? (
-                            <PortableText
-                                value={content}
-                                components={{
-                                    types: {
-                                        code: CodeBlock,
-                                    },
-                                    block: {
-                                        h1: ({ children }) => <Heading as="h1" size={4} style={{ marginTop: '2em', marginBottom: '0.5em', fontWeight: 700 }}>{children}</Heading>,
-                                        h2: ({ children }) => <Heading as="h2" size={3} style={{ marginTop: '1.5em', marginBottom: '0.5em', fontWeight: 600 }}>{children}</Heading>,
-                                        h3: ({ children }) => <Heading as="h3" size={2} style={{ marginTop: '1.5em', marginBottom: '0.5em', fontWeight: 600 }}>{children}</Heading>,
-                                        normal: ({ children }) => <p style={{ marginBottom: '1.25em', color: '#d4d4d8' }}>{children}</p>,
-                                        blockquote: ({ children }) => <blockquote style={{ borderLeft: '4px solid #3f3f46', paddingLeft: '1em', fontStyle: 'italic', marginBottom: '1.25em', color: '#a1a1aa' }}>{children}</blockquote>
-                                    },
-                                    list: {
-                                        bullet: ({ children }) => <ul style={{ listStyleType: 'disc', paddingLeft: '1.6em', marginBottom: '1.25em', color: '#d4d4d8' }}>{children}</ul>,
-                                        number: ({ children }) => <ol style={{ listStyleType: 'decimal', paddingLeft: '1.6em', marginBottom: '1.25em', color: '#d4d4d8' }}>{children}</ol>,
-                                    }
-                                }}
-                            />
-                        ) : (
-                            <Text muted size={1} style={{ fontStyle: 'italic', opacity: 0.5 }}>
-                                Start writing content to preview...
-                            </Text>
-                        )}
+                    {(doc.summary || doc.description) && <Text size={3} style={{ color: themeColors.muted, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{doc.summary || doc.description}</Text>}
+                    <div style={{ height: '1px', background: `linear-gradient(to right, ${themeColors.subBorder}, transparent)` }}></div>
+                    <div style={{ fontSize: '1.125rem', lineHeight: 1.75, color: themeColors.text }}>
+                        {doc.content ? (
+                            <PortableText value={doc.content} components={{ types: { code: (props) => <CodeBlock {...props} darkMode={darkMode} /> }, block: { h1: ({ children }) => <Heading as="h1" size={4} style={{ marginTop: '2em', marginBottom: '0.5em', fontWeight: 700, color: themeColors.text }}>{children}</Heading>, h2: ({ children }) => <Heading as="h2" size={3} style={{ marginTop: '1.5em', marginBottom: '0.5em', fontWeight: 600, color: themeColors.text }}>{children}</Heading>, h3: ({ children }) => <Heading as="h3" size={2} style={{ marginTop: '1.5em', marginBottom: '0.5em', fontWeight: 600, color: themeColors.text }}>{children}</Heading>, normal: ({ children }) => <p style={{ marginBottom: '1.25em', color: themeColors.text }}>{children}</p>, blockquote: ({ children }) => <blockquote style={{ borderLeft: '4px solid #3f3f46', paddingLeft: '1em', fontStyle: 'italic', marginBottom: '1.25em', color: themeColors.muted }}>{children}</blockquote> }, list: { bullet: ({ children }) => <ul style={{ listStyleType: 'disc', paddingLeft: '1.6em', marginBottom: '1.25em', color: themeColors.text }}>{children}</ul>, number: ({ children }) => <ol style={{ listStyleType: 'decimal', paddingLeft: '1.6em', marginBottom: '1.25em', color: themeColors.text }}>{children}</ol>, } }} />
+                        ) : <Text muted size={1} style={{ fontStyle: 'italic', opacity: 0.5 }}>Start writing...</Text>}
                     </div>
                 </Stack>
             </Box>

@@ -26,6 +26,40 @@ export const POSTS_QUERY = defineQuery(`
   }
 `);
 
+export const AUTHORS_QUERY = defineQuery(`
+  *[_type == "author"]|order(firstName asc){
+    "name": firstName + " " + lastName,
+    firstName,
+    lastName,
+    "slug": slug.current,
+    image,
+    bio,
+    profileTag,
+    website,
+    github,
+    twitter,
+    linkedin,
+    instagram
+  }
+`);
+
+export const AUTHOR_BY_SLUG_QUERY = defineQuery(`
+  *[_type == "author" && slug.current == $slug][0]{
+    "name": firstName + " " + lastName,
+    firstName,
+    lastName,
+    "slug": slug.current,
+    image,
+    bio,
+    profileTag,
+    website,
+    github,
+    twitter,
+    linkedin,
+    instagram
+  }
+`);
+
 export const POST_BY_SLUG_QUERY = defineQuery(`
   *[_type == "post" && slug.current == $slug][0]{
     title,
@@ -37,17 +71,45 @@ export const POST_BY_SLUG_QUERY = defineQuery(`
     "categoryTitle": category->title,
     "tags": tags[]{ "t": coalesce(@->title, @) }.t,
     "skillLevel": skillLevel,
-    "author": author->{name, "slug": slug.current, image, bio, linkedin, instagram}
+    "author": author->{
+      "name": firstName + " " + lastName,
+      firstName,
+      lastName,
+      "slug": slug.current, 
+      image, 
+      bio, 
+      profileTag, 
+      website, 
+      github, 
+      twitter, 
+      linkedin, 
+      instagram
+    }
   }
 `);
 
-export const POSTS_BY_CATEGORY_QUERY = defineQuery(`
-  *[_type == "post" && category->slug.current == $categorySlug]|order(_createdAt desc){
+export const POSTS_BY_AUTHOR_QUERY = defineQuery(`
+  *[_type == "post" && author->slug.current == $slug]|order(_createdAt desc){
     title,
     "slug": slug.current,
     "date": _createdAt,
     summary,
     "categorySlug": category->slug.current,
+    "categoryTitle": category->title,
+    "categoryColor": category->color,
+    "tags": tags[]{ "t": coalesce(@->title, @) }.t
+  }
+`);
+
+export const POSTS_BY_CATEGORY_QUERY = defineQuery(`
+  *[_type == "post" && category->slug.current == $slug]|order(_createdAt desc){
+    title,
+    "slug": slug.current,
+    "date": _createdAt,
+    summary,
+    "categorySlug": category->slug.current,
+    "categoryTitle": category->title,
+    "categoryColor": category->color,
     "tags": tags[]{ "t": coalesce(@->title, @) }.t
   }
 `);

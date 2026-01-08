@@ -5,7 +5,9 @@ export const metadata: Metadata = {
   description: "Learn more about the origins and mission of Cyvanta.",
 };
 
-export default function AboutPage() {
+
+export default async function AboutPage() {
+
   return (
     <div className="min-h-screen pt-32 pb-20 px-6 font-mono">
       <div className="max-w-3xl mx-auto space-y-12">

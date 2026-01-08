@@ -8,5 +8,9 @@ const NextStudio = dynamic(() => import('next-sanity/studio').then((d) => d.Next
 })
 
 export default function Studio() {
-    return <NextStudio config={config} />
+    return (
+        <div id="sanity-studio-wrapper" style={{ height: '100vh', maxHeight: '100dvh', overscrollBehavior: 'none' }}>
+            <NextStudio config={config} />
+        </div>
+    )
 }

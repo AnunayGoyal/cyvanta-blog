@@ -133,3 +133,38 @@ export async function getRelatedPosts(
 
   return scored.slice(0, limit).map((x) => x.post);
 }
+
+/* -------------------------------------------------------------------------- */
+/*                                Authors                                     */
+/* -------------------------------------------------------------------------- */
+
+import { AUTHORS_QUERY } from "@/sanity/lib/queries";
+import type { Image } from "sanity";
+
+export interface Author {
+  name: string;
+  slug: string;
+  image?: Image;
+  staticImage?: string;
+  bio?: string;
+  profileTag?: string;
+  website?: string;
+  github?: string;
+  twitter?: string;
+  linkedin?: string;
+  instagram?: string;
+}
+
+export async function getAllAuthors(): Promise<Author[]> {
+  return await client.fetch(AUTHORS_QUERY);
+}
+
+import { AUTHOR_BY_SLUG_QUERY, POSTS_BY_AUTHOR_QUERY } from "@/sanity/lib/queries";
+
+export async function getAuthorBySlug(slug: string): Promise<Author | null> {
+  return await client.fetch(AUTHOR_BY_SLUG_QUERY, { slug });
+}
+
+export async function getPostsByAuthorSlug(slug: string): Promise<FullPostMeta[]> {
+  return await client.fetch(POSTS_BY_AUTHOR_QUERY, { slug });
+}
