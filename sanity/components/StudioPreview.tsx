@@ -364,32 +364,40 @@ export default function StudioPreview({ document, options }: { document: { displ
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             {/* Category Badge */}
-                            {(doc.tag || categoryData?.tag) && (
+                            {((typeof doc.tag === 'string' && doc.tag) || (categoryData?.tag && typeof categoryData.tag === 'string')) && (
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                     <span style={{
                                         color: resolveColor(categoryData?.color || doc.color) || themeColors.text, borderWidth: '1px', borderStyle: 'solid',
                                         fontSize: '11px', fontWeight: 'bold', padding: '3px 12px', borderRadius: '2px', letterSpacing: '0.22em', textTransform: 'uppercase'
                                     }}>
-                                        {doc.tag || categoryData?.tag}
+                                        {typeof doc.tag === 'string' ? doc.tag : (typeof categoryData?.tag === 'string' ? categoryData.tag : '')}
                                     </span>
-                                    {categoryData?.subtitle && <span style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{categoryData.subtitle}</span>}
+                                    {categoryData?.subtitle && typeof categoryData.subtitle === 'string' && <span style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{categoryData.subtitle}</span>}
                                 </div>
                             )}
                             {loading && <Spinner size={1} muted />}
                         </div>
-                        <Heading size={5} style={{ fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.1, color: themeColors.text }}>{doc.title || doc.name}</Heading>
+                        <Heading size={5} style={{ fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.1, color: themeColors.text }}>
+                            {typeof doc.title === 'string' ? doc.title : (typeof doc.name === 'string' ? doc.name : 'Untitled')}
+                        </Heading>
                         {tagsData.length > 0 && (
                             <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                                 {tagsData.map((tag: any, i: number) => (
                                     <div key={i} style={{ display: 'flex', alignItems: 'center', border: themeColors.border, borderRadius: '4px', padding: '2px 8px', background: darkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)' }}>
                                         <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: resolveColor(tag.color) || '#fff', marginRight: '6px' }} />
-                                        <span style={{ fontSize: '12px', color: themeColors.muted, fontFamily: 'monospace' }}>{tag.title}</span>
+                                        <span style={{ fontSize: '12px', color: themeColors.muted, fontFamily: 'monospace' }}>
+                                            {typeof tag.title === 'string' ? tag.title : 'Tag'}
+                                        </span>
                                     </div>
                                 ))}
                             </div>
                         )}
                     </div>
-                    {(doc.summary || doc.description) && <Text size={3} style={{ color: themeColors.muted, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{doc.summary || doc.description}</Text>}
+                    {((doc.summary && typeof doc.summary === 'string') || (doc.description && typeof doc.description === 'string')) && (
+                        <Text size={3} style={{ color: themeColors.muted, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
+                            {typeof doc.summary === 'string' ? doc.summary : doc.description}
+                        </Text>
+                    )}
                     <div style={{ height: '1px', background: `linear-gradient(to right, ${themeColors.subBorder}, transparent)` }}></div>
                     <div style={{ fontSize: '1.125rem', lineHeight: 1.75, color: themeColors.text }}>
                         {doc.content ? (
