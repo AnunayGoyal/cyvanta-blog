@@ -32,7 +32,7 @@ export function getTagProps(tag: string | undefined, colorOverride?: string | nu
     // Default Gray
     let hex = COLORS.gray;
 
-    if (tag) {
+    if (tag && typeof tag === 'string') {
         const t = tag.toLowerCase().trim();
 
         // 1. Sanity Override
@@ -71,21 +71,22 @@ export function getTagProps(tag: string | undefined, colorOverride?: string | nu
  * Returns the Hex color code for a given category/tag.
  */
 export function getCategoryHex(tag: string | undefined): string {
-    if (!tag) return COLORS.gray;
+    if (tag && typeof tag === 'string') {
+        const t = tag.toLowerCase().trim();
 
-    const t = tag.toLowerCase().trim();
-
-    // Check if passed string is already a hex
-    if (t.startsWith("#")) return t;
+        // Check if passed string is already a hex
+        if (t.startsWith("#")) return t;
 
     // Check if it's a known color name
     if (COLORS[t as keyof typeof COLORS]) {
         return COLORS[t as keyof typeof COLORS];
     }
 
-    const match = KEYWORD_MAP.find((entry) =>
-        entry.keywords.some((keyword) => t.includes(keyword))
-    );
+        const match = KEYWORD_MAP.find((entry) =>
+            entry.keywords.some((keyword) => t.includes(keyword))
+        );
 
-    return match ? match.color : COLORS.gray;
+        return match ? match.color : COLORS.gray;
+    }
+    return COLORS.gray;
 }

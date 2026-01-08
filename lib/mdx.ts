@@ -66,7 +66,7 @@ export type PostMeta = {
 export type FullPostMeta = PostMeta;
 
 export async function getPostsByCategorySlug(categorySlug: string): Promise<PostMeta[]> {
-  return await (await getClient()).fetch(POSTS_BY_CATEGORY_QUERY, { categorySlug });
+  return await (await getClient()).fetch(POSTS_BY_CATEGORY_QUERY, { slug: categorySlug });
 }
 
 /**
