@@ -94,8 +94,8 @@ export default async function CategoryPage({
                 {category.tag}
               </span>
 
-              {/* Post Tags */}
-              {post.tags?.map((tag) => {
+              {/* Post Tags - STRICT FILTER for strings only */}
+              {post.tags?.filter(t => typeof t === 'string').map((tag) => {
                 const props = getTagProps(tag, null);
                 return (
                   <span
