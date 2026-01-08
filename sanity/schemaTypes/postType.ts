@@ -121,7 +121,9 @@ export const postType = defineType({
       title: 'Sub Tags',
       description: 'Ad-hoc topics for this post',
       type: 'array',
-      of: [{ type: 'string' }],
+      // The validation error indicates these are actually stored as objects/references in the data
+      // Changing schema to match the data structure (and the preview logic)
+      of: [{ type: 'reference', to: [{ type: 'tag' }] }],
       options: {
         layout: 'tags',
       },
