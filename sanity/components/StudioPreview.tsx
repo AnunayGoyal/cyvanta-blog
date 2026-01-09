@@ -354,6 +354,110 @@ export default function StudioPreview({ document, options }: { document: { displ
         )
     }
 
+    // CATEGORY CARD PREVIEW
+    if (options?.mode === 'card' && options?.type === 'category') {
+        const hexColor = resolveColor(doc.color) || '#333';
+        
+        return (
+             <div style={{ 
+                height: '100%', 
+                width: '100%', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                background: darkMode ? '#050505' : '#f4f4f5', 
+                padding: '2rem',
+                fontFamily: 'Inter, sans-serif'
+             }}>
+                 <BackgroundSystem />
+                 {toggleButton}
+                 
+                 <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '400px' }}>
+                    <div style={{
+                        position: 'relative',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        height: '280px',
+                        width: '100%',
+                        overflow: 'hidden',
+                        borderRadius: '0.125rem', // rounded-sm
+                        border: darkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)',
+                        background: darkMode ? '#0a0a0a' : '#ffffff',
+                        boxShadow: darkMode ? 'none' : '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                        padding: '1.25rem', // p-5
+                        transition: 'all 0.3s ease',
+                    }}>
+                        {/* TOP SECTION */}
+                        <div style={{ position: 'relative', zIndex: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', height: '2.5rem', flexShrink: 0 }}>
+                            {/* Tag Chip */}
+                            <span style={{
+                                color: hexColor,
+                                borderColor: hexColor,
+                                borderWidth: '1px',
+                                borderStyle: 'solid',
+                                fontSize: '11px',
+                                fontWeight: 700,
+                                padding: '3px 12px',
+                                borderRadius: '2px', // rounded-sm
+                                letterSpacing: '0.22em',
+                                textTransform: 'uppercase',
+                                lineHeight: 1
+                            }}>
+                                {doc.tag || 'TAG'}
+                            </span>
+                            
+                            {/* Subtitle */}
+                             <span style={{ fontSize: '11px', color: '#71717a', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                {doc.subtitle}
+                            </span>
+                        </div>
+
+                        {/* BOTTOM SECTION */}
+                        <div style={{ position: 'relative', zIndex: 10, marginTop: 'auto' }}>
+                             {/* Title */}
+                            <div style={{ height: '70px', display: 'flex', alignItems: 'flex-end', marginBottom: '0.25rem' }}>
+                                <h2 style={{
+                                    fontSize: '1.25rem', // text-xl
+                                    fontWeight: 700,
+                                    lineHeight: 1.2,
+                                    color: themeColors.text,
+                                    margin: 0,
+                                    display: '-webkit-box',
+                                    WebkitLineClamp: 2,
+                                    WebkitBoxOrient: 'vertical',
+                                    overflow: 'hidden'
+                                }}>
+                                    {doc.title || 'Category Title'} <span style={{ marginLeft: '0.25rem' }}>→</span>
+                                </h2>
+                            </div>
+
+                            {/* Description */}
+                            <div style={{ height: '80px', overflow: 'hidden' }}>
+                                <p style={{
+                                    fontSize: '0.875rem', // text-sm
+                                    color: '#71717a', // text-muted
+                                    lineHeight: 1.625,
+                                    margin: 0,
+                                    display: '-webkit-box',
+                                    WebkitLineClamp: 3,
+                                    WebkitBoxOrient: 'vertical',
+                                    overflow: 'hidden'
+                                }}>
+                                    {doc.description || 'Category description will appear here...'}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Hint text below */}
+                    <p style={{ textAlign: 'center', marginTop: '1rem', color: themeColors.muted, fontSize: '0.75rem', fontFamily: 'monospace' }}>
+                         PREVIEWING: {doc.title}
+                    </p>
+                 </div>
+             </div>
+        )
+    }
+
     // NORMAL MODE
     return (
         <Card padding={4} height="fill" overflow="auto" tone="transparent" style={{ background: themeColors.bg, color: themeColors.text, position: 'relative' }}>

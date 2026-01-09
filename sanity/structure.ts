@@ -23,6 +23,16 @@ export const structure: StructureResolver = (S) =>
     ])
 
 export const defaultDocumentNode: DefaultDocumentNodeResolver = (S, { schemaType }) => {
+  if (schemaType === 'category') {
+    return S.document().views([
+      S.view.form(),
+      S.view
+        .component(StudioPreview)
+        .options({ type: schemaType, mode: 'card' })
+        .title('Card Preview'),
+    ])
+  }
+
   // Common views
   const views = [
     S.view.form(),
@@ -31,16 +41,6 @@ export const defaultDocumentNode: DefaultDocumentNodeResolver = (S, { schemaType
       .options({ type: schemaType, mode: 'normal' })
       .title('Live Preview')
   ]
-
-  // Type specific views
-  if (schemaType === 'category') {
-    views.push(
-      S.view
-        .component(StudioPreview)
-        .options({ type: schemaType, mode: 'card' })
-        .title('Card Preview')
-    )
-  }
 
   // Enable for relevant types
   if (['post', 'category', 'author', 'tag'].includes(schemaType)) {
