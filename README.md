@@ -17,8 +17,8 @@ A high-performance, aesthetically driven cybersecurity blog built with Next.js 1
 ### 1. Immersive "Hacker" Aesthetic
 
 - **Typography**: Global usage of [JetBrains Mono](https://www.jetbrains.com/lp/mono/) for a true developer-centric feel.
-- **Visuals**: Enhanced Navbar with a prominent, red-accented logo.
-- **Design System**: Custom dark mode with "zinc" and "emerald" accents, scanline animations, and terminal-style typography.
+- **Visuals**: Enhanced Navbar with a prominent, red-accented logo and a "Magnetic Particle Field" background that reacts to cursor movement.
+- **Design System**: Custom dark mode with "zinc" and "emerald" accents, scanline animations, and terminal-style typography. Refined light mode with solid colors and improved contrast.
 - **Micro-interactions**: Hover effects, glowing borders, and dynamic grid backgrounds.
 - **Responsive**: Fully optimized layouts for mobile, tablet, and desktop.
 
@@ -36,6 +36,12 @@ A high-performance, aesthetically driven cybersecurity blog built with Next.js 1
 - **CMS**: Sanity (v3) with Visual Editing support
 - **Styling**: Tailwind CSS + Framer Motion
 - **Performance**: Optimized font loading, image handling, and static generation.
+
+### 4. Enhanced Author Profiles
+
+- **Dedicated Author Pages**: Dynamic `/author/[slug]` routes displaying author bio, social links, and a grid of their posts.
+- **Rich Schema**: Extended Sanity schema to include detailed author information, avatars, and social media presence (GitHub, X, LinkedIn, etc.).
+- **Smart Integration**: Authors are automatically linked to their posts, creating a seamless navigation experience.
 
 ## Using this Project
 
@@ -113,7 +119,7 @@ If you prefer to build the image manually:
 
 ## Project Structure
 
-- `/app`: Next.js App Router pages (Website & Studio).
+- `/app`: Next.js App Router pages (Website, Studio, & Author Profiles).
 - `/components`: Reusable UI components (Navbar, Footer, Hero, etc.).
 - `/lib`: Utilities (Sanity queries, color helpers, etc.).
 - `/sanity`: Schema definitions and Studio configuration.

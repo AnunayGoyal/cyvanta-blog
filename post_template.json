@@ -1,0 +1,44 @@
+{
+  "_type": "post",
+  "title": "Your Article Title Here",
+  "slug": {
+    "_type": "slug",
+    "current": "your-article-slug-here"
+  },
+  "author": {
+    "_type": "reference",
+    "_ref": "AUTHOR_ID_HERE"
+  },
+  "category": {
+    "_type": "reference",
+    "_ref": "CATEGORY_ID_HERE"
+  },
+  "mainTag": {
+    "_type": "reference",
+    "_ref": "TAG_ID_HERE"
+  },
+  "skillLevel": "intermediate",
+  "summary": "A brief summary of your article that appears in preview cards.",
+  "tags": [
+    {
+      "_type": "reference",
+      "_ref": "TAG_ID_1"
+    },
+    {
+      "_type": "reference",
+      "_ref": "TAG_ID_2"
+    }
+  ],
+  "content": [
+    {
+      "_type": "block",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Start writing your content here..."
+        }
+      ]
+    }
+  ]
+}

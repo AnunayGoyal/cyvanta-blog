@@ -1,8 +1,10 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPostBySlug, PostTag } from "@/lib/mdx";
+import { getPostBySlug, getRelatedPosts, PostTag } from "@/lib/mdx";
 import { PortableText } from "next-sanity";
 import CodeWindow from "@/components/CodeWindow";
+import RelatedIntel from "@/components/RelatedIntel";
+import SocialShare from "@/components/SocialShare";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import Table from "@/components/Table";
 import YouTube from "@/components/YouTube";
 import { urlFor } from "@/sanity/lib/image";
@@ -82,6 +84,8 @@ export default async function BlogPost({ params }: Props) {
     return notFound();
   }
 
+  const relatedPosts = await getRelatedPosts(slug, 3);
+
   const { title, date, tags, content, author, skillLevel } = post;
 
   return (
@@ -100,15 +104,15 @@ export default async function BlogPost({ params }: Props) {
         <aside className="hidden xl:block w-64 shrink-0">
           <div className="sticky top-32">
             <TableOfContents content={content} />
+            <div className="mt-8">
+               <SocialShare title={title} />
+            </div>
           </div>
         </aside>
 
         {/* Main Content Area */}
         <main className="flex-1 w-full max-w-3xl">
-          <Link href="/" className="group inline-flex items-center text-sm text-gray-500 hover:text-primary transition-colors mb-8">
-            <span className="mr-2 transition-transform group-hover:-translate-x-1">&lt;-</span>
-            BACK TO INTEL
-          </Link>
+          <Breadcrumbs />
 
           <header className="mb-12 border-b border-border pb-8">
             <div className="flex gap-3 mb-6">
@@ -145,10 +149,17 @@ export default async function BlogPost({ params }: Props) {
             <PortableText value={content} components={ptComponents} />
           </article>
 
+          <div className="xl:hidden">
+            <SocialShare title={title} />
+          </div>
+
           <FeedbackWidget />
         </main>
 
       </div>
+      
+      {/* Related Intel Section */}
+      <RelatedIntel posts={relatedPosts} />
     </div>
   );
 }
